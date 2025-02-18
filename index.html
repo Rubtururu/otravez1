@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staking Pool</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.7.3/web3.min.js"></script>
+    <script src="app.js" defer></script>
+</head>
+<body>
+    <header>
+        <h1>Staking Pool</h1>
+        <button id="connectWallet">Conectar Wallet</button>
+    </header>
+    <main>
+        <section class="stats">
+            <h2>Estadísticas</h2>
+            <p>Total Depositado: <span id="totalDeposited">0 BNB</span></p>
+            <p>Recompensas Totales: <span id="totalRewards">0 BNB</span></p>
+            <p>Tu Depósito: <span id="userDeposit">0 BNB</span></p>
+            <p>Tu Nivel: <span id="userLevel">1</span></p>
+            <p>Recompensas Disponibles: <span id="availableRewards">0 BNB</span></p>
+            <p>Tickets de Lotería: <span id="lotteryTickets">0</span></p>
+            <p>Último Ganador: <span id="lastWinner">N/A</span></p>
+            <p>Usuarios Activos: <span id="activeUsers">0</span></p>
+            <p>Fondos en la Pool: <span id="poolBalance">0 BNB</span></p>
+            <p>Bonificación de Equipo: <span id="teamBonus">0 BNB</span></p>
+            <p>Recompensa por Actividad Diaria: <span id="dailyBonus">0 BNB</span></p>
+        </section>
+        <section class="stake-section">
+            <h2>Depositar BNB</h2>
+            <input type="text" id="depositAmount" placeholder="Cantidad en BNB">
+            <input type="text" id="referrer" placeholder="Dirección del referidor (opcional)">
+            <button id="depositBtn">Depositar</button>
+        </section>
+        <section class="actions">
+            <h2>Acciones</h2>
+            <button id="claimRewards">Reclamar Recompensas</button>
+            <button id="upgradeLevel">Mejorar Nivel</button>
+            <button id="openMysteryBox">Abrir Mystery Box</button>
+            <button id="spinWheel">Girar Ruleta</button>
+            <button id="claimClanBonus">Reclamar Bonus de Clan</button>
+            <button id="withdraw">Retirar Fondos</button>
+            <button id="compoundRewards">Reinvertir Recompensas</button>
+        </section>
+        <section class="lottery">
+            <h2>Lotería</h2>
+            <button id="buyLotteryTicket">Comprar Boleto</button>
+            <p>Tickets comprados: <span id="lotteryTickets">0</span></p>
+            <p>Último ganador: <span id="lastWinner">N/A</span></p>
+        </section>
+        <section class="referrals">
+            <h2>Referidos</h2>
+            <p>Tus Referidos: <span id="userReferrals">0</span></p>
+            <p>Bonos de Referidos: <span id="referralBonus">0 BNB</span></p>
+        </section>
+        <section class="clans">
+            <h2>Clanes</h2>
+            <select id="clanList">
+                <option value="">Selecciona un Clan</option>
+            </select>
+            <button id="joinClan">Unirse al Clan</button>
+            <p>Mi Clan: <span id="userClan">Ninguno</span></p>
+            <p>Puntos de Clan: <span id="clanPoints">0</span></p>
+        </section>
+        <section class="game-wheel">
+            <h2>Ruleta de Premios</h2>
+            <button id="spinGameWheel">Girar Ruleta</button>
+            <p>Resultado: <span id="wheelResult">-</span></p>
+        </section>
+        <section class="leaderboard">
+            <h2>Ranking de Jugadores</h2>
+            <ol id="playerLeaderboard">
+                <li>No hay datos aún</li>
+            </ol>
+        </section>
+    </main>
+    <footer>
+        <p>© 2025 Staking Pool. Todos los derechos reservados.</p>
+    </footer>
+</body>
+</html>
