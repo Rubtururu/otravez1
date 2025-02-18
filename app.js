@@ -19,7 +19,7 @@ const myDepositedAmount = document.getElementById("myDepositedAmount");
 const myTotalEarned = document.getElementById("myTotalEarned");
 const myReferralEarnings = document.getElementById("myReferralEarnings");
 const myReferralCount = document.getElementById("myReferralCount");
-const nextClaimTime = document.getElementById("nextClaimTime");
+const nextClaimTimeUser = document.getElementById("nextClaimTimeUser");
 
 const depositAmount = document.getElementById("depositAmount");
 const referrerAddress = document.getElementById("referrerAddress");
@@ -58,6 +58,29 @@ async function loadStats() {
     myTotalEarned.textContent = `${web3.utils.fromWei(stats[6], 'ether')} BNB`;
     myReferralEarnings.textContent = `${web3.utils.fromWei(stats[7], 'ether')} BNB`;
     myReferralCount.textContent = stats[8];
+
+    // Obtener el último ganador de la lotería
+    const lastWinner = await contract.methods.getLastLotteryWinner().call();
+    lastLotteryWinner.textContent = lastWinner;
+
+    // Obtener el premio de la lotería
+    const lastPrize = await contract.methods.getLastLotteryPrize().call();
+    lastLotteryPrize.textContent = `${web3.utils.fromWei(lastPrize, 'ether')} BNB`;
+
+    // Calcular el tiempo para la próxima reclamación
+    const user = await contract.methods.users(userAddress).call();
+    const lastClaimTime = user.lastClaimTime;
+    const nextClaim = Number(lastClaimTime) + 24 * 60 * 60;
+    const now = Math.floor(Date.now() / 1000);
+    const timeLeft = nextClaim - now;
+
+    if (timeLeft > 0) {
+        const hours = Math.floor(timeLeft / 3600);
+        const minutes = Math.floor((timeLeft % 3600) / 60);
+        nextClaimTimeUser.textContent = `${hours}h ${minutes}m`;
+    } else {
+        nextClaimTimeUser.textContent = "¡Ya puedes reclamar!";
+    }
 }
 
 // Eventos
