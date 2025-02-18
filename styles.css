@@ -1,79 +1,115 @@
 /* Estilos generales */
 body {
-    font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+    font-family: 'Orbitron', sans-serif;
+    background: radial-gradient(circle, #0a0a0a, #000000);
     color: #ffffff;
     margin: 0;
-    padding: 20px;
-    min-height: 100vh;
-    overflow-y: auto;
+    padding: 0;
+    overflow: hidden;
 }
 
-.container {
+.game-container {
     width: 100%;
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 15px;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: url('background.jpg') no-repeat center center/cover;
+    animation: backgroundAnimation 20s infinite linear;
 }
 
-header {
+@keyframes backgroundAnimation {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 100% 100%; }
+}
+
+/* Header del juego */
+.game-header {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
+    animation: glow 2s infinite alternate;
 }
 
-header h1 {
-    font-size: 2rem;
+@keyframes glow {
+    0% { text-shadow: 0 0 10px #00ffcc, 0 0 20px #00ffcc, 0 0 30px #00ffcc; }
+    100% { text-shadow: 0 0 20px #ff00cc, 0 0 30px #ff00cc, 0 0 40px #ff00cc; }
+}
+
+.game-header h1 {
+    font-size: 3rem;
     margin: 0;
-    background: linear-gradient(90deg, #ffcc00, #ff6699);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: #00ffcc;
 }
 
-header p {
-    font-size: 1rem;
+.game-header p {
+    font-size: 1.2rem;
     color: #cccccc;
 }
 
-/* Tarjetas de estadísticas */
-.stats, .actions, .user-stats {
+/* Panel de estadísticas */
+.game-stats {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 15px;
     margin-bottom: 20px;
 }
 
-.stat-card, .action-card, .user-stat-card {
-    background: rgba(255, 255, 255, 0.1);
+.stat-card {
+    background: rgba(0, 0, 0, 0.7);
     padding: 15px;
     border-radius: 10px;
     text-align: center;
+    border: 1px solid #00ffcc;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.stat-card:hover, .action-card:hover, .user-stat-card:hover {
+.stat-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 4px 16px rgba(255, 204, 0, 0.3);
+    box-shadow: 0 4px 16px rgba(0, 255, 204, 0.3);
 }
 
-.stat-card h3, .action-card h3, .user-stat-card h3 {
+.stat-card h3 {
     font-size: 1rem;
     margin-bottom: 10px;
+    color: #00ffcc;
+}
+
+.stat-card p {
+    font-size: 1.2rem;
+    margin: 0;
     color: #ffffff;
 }
 
-.stat-card p, .action-card p, .user-stat-card p {
-    font-size: 1.2rem;
-    margin: 0;
-    color: #ffcc00;
+/* Panel de acciones */
+.game-actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
 }
 
-/* Botones y entradas */
-input {
+.action-card {
+    background: rgba(0, 0, 0, 0.7);
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    border: 1px solid #ff00cc;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.action-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 16px rgba(255, 0, 204, 0.3);
+}
+
+.action-card h3 {
+    font-size: 1rem;
+    margin-bottom: 10px;
+    color: #ff00cc;
+}
+
+.action-card input {
     width: 100%;
     padding: 10px;
     margin-bottom: 10px;
@@ -82,53 +118,63 @@ input {
     font-size: 0.9rem;
     background: rgba(255, 255, 255, 0.1);
     color: #ffffff;
-    transition: background 0.3s ease;
 }
 
-input::placeholder {
-    color: #cccccc;
-}
-
-input:focus {
-    background: rgba(255, 255, 255, 0.2);
-    outline: none;
-}
-
-button {
+.action-card button {
     width: 100%;
     padding: 10px;
-    background: linear-gradient(90deg, #ffcc00, #ff6699);
+    background: linear-gradient(90deg, #00ffcc, #ff00cc);
     border: none;
     border-radius: 5px;
     font-size: 0.9rem;
-    color: #1a1a1a;
+    color: #000000;
     cursor: pointer;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-button:hover {
+.action-card button:hover {
     transform: translateY(-3px);
-    box-shadow: 0 4px 16px rgba(255, 204, 0, 0.3);
+    box-shadow: 0 4px 16px rgba(0, 255, 204, 0.3);
 }
 
-/* Pie de página */
-footer {
+/* Panel de usuario */
+.game-user-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.user-stat-card {
+    background: rgba(0, 0, 0, 0.7);
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    border: 1px solid #00ffcc;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.user-stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 16px rgba(0, 255, 204, 0.3);
+}
+
+.user-stat-card h3 {
+    font-size: 1rem;
+    margin-bottom: 10px;
+    color: #00ffcc;
+}
+
+.user-stat-card p {
+    font-size: 1.2rem;
+    margin: 0;
+    color: #ffffff;
+}
+
+/* Footer del juego */
+.game-footer {
     text-align: center;
     margin-top: 20px;
     font-size: 0.8rem;
     color: #cccccc;
-}
-
-/* Scroll personalizado */
-body::-webkit-scrollbar {
-    width: 8px;
-}
-
-body::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.1);
-}
-
-body::-webkit-scrollbar-thumb {
-    background: linear-gradient(90deg, #ffcc00, #ff6699);
-    border-radius: 4px;
 }
