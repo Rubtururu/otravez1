@@ -38,6 +38,7 @@ async function init() {
             userAddress = (await web3.eth.getAccounts())[0];
             contract = new web3.eth.Contract(abi, contractAddress);
             loadStats();
+            setInterval(loadStats, 5000); // Actualizar estadísticas cada 5 segundos
         } catch (error) {
             console.error("Error al conectar con MetaMask:", error);
         }
@@ -48,38 +49,45 @@ async function init() {
 
 // Cargar estadísticas
 async function loadStats() {
-    const stats = await contract.methods.getStats().call({ from: userAddress });
-    totalDeposited.textContent = `${web3.utils.fromWei(stats[0], 'ether')} BNB`;
-    totalDividendsPaid.textContent = `${web3.utils.fromWei(stats[1], 'ether')} BNB`;
-    totalUsers.textContent = stats[3];
-    currentPoolBalance.textContent = `${web3.utils.fromWei(stats[2], 'ether')} BNB`;
-    lotteryPool.textContent = `${web3.utils.fromWei(stats[8], 'ether')} BNB`;
-    myDepositedAmount.textContent = `${web3.utils.fromWei(stats[5], 'ether')} BNB`;
-    myTotalEarned.textContent = `${web3.utils.fromWei(stats[6], 'ether')} BNB`;
-    myReferralEarnings.textContent = `${web3.utils.fromWei(stats[7], 'ether')} BNB`;
-    myReferralCount.textContent = stats[8];
+    try {
+        // Obtener estadísticas globales
+        const stats = await contract.methods.getStats().call({ from: userAddress });
+        totalDeposited.textContent = `${web3.utils.fromWei(stats[0], 'ether')} BNB`;
+        totalDividendsPaid.textContent = `${web3.utils.fromWei(stats[1], 'ether')} BNB`;
+        totalUsers.textContent = stats[3];
+        currentPoolBalance.textContent = `${web3.utils.fromWei(stats[2], 'ether')} BNB`;
+        lotteryPool.textContent = `${web3.utils.fromWei(stats[8], 'ether')} BNB`;
 
-    // Obtener el último ganador de la lotería
-    const lastWinner = await contract.methods.getLastLotteryWinner().call();
-    lastLotteryWinner.textContent = lastWinner;
+        // Obtener estadísticas del usuario
+        const user = await contract.methods.users(userAddress).call();
+        myDepositedAmount.textContent = `${web3.utils.fromWei(user.depositedAmount, 'ether')} BNB`;
+        myTotalEarned.textContent = `${web3.utils.fromWei(user.totalEarned, 'ether')} BNB`;
+        myReferralEarnings.textContent = `${web3.utils.fromWei(user.referralEarnings, 'ether')} BNB`;
+        myReferralCount.textContent = user.referralCount;
 
-    // Obtener el premio de la lotería
-    const lastPrize = await contract.methods.getLastLotteryPrize().call();
-    lastLotteryPrize.textContent = `${web3.utils.fromWei(lastPrize, 'ether')} BNB`;
+        // Obtener último ganador de la lotería
+        const lastWinner = await contract.methods.getLastLotteryWinner().call();
+        lastLotteryWinner.textContent = lastWinner !== "0x0000000000000000000000000000000000000000" ? lastWinner : "--";
 
-    // Calcular el tiempo para la próxima reclamación
-    const user = await contract.methods.users(userAddress).call();
-    const lastClaimTime = user.lastClaimTime;
-    const nextClaim = Number(lastClaimTime) + 24 * 60 * 60;
-    const now = Math.floor(Date.now() / 1000);
-    const timeLeft = nextClaim - now;
+        // Obtener premio de la lotería
+        const lastPrize = await contract.methods.getLastLotteryPrize().call();
+        lastLotteryPrize.textContent = `${web3.utils.fromWei(lastPrize, 'ether')} BNB`;
 
-    if (timeLeft > 0) {
-        const hours = Math.floor(timeLeft / 3600);
-        const minutes = Math.floor((timeLeft % 3600) / 60);
-        nextClaimTimeUser.textContent = `${hours}h ${minutes}m`;
-    } else {
-        nextClaimTimeUser.textContent = "¡Ya puedes reclamar!";
+        // Calcular tiempo para la próxima reclamación
+        const lastClaimTime = user.lastClaimTime;
+        const nextClaim = Number(lastClaimTime) + 24 * 60 * 60;
+        const now = Math.floor(Date.now() / 1000);
+        const timeLeft = nextClaim - now;
+
+        if (timeLeft > 0) {
+            const hours = Math.floor(timeLeft / 3600);
+            const minutes = Math.floor((timeLeft % 3600) / 60);
+            nextClaimTimeUser.textContent = `${hours}h ${minutes}m`;
+        } else {
+            nextClaimTimeUser.textContent = "¡Ya puedes reclamar!";
+        }
+    } catch (error) {
+        console.error("Error al cargar estadísticas:", error);
     }
 }
 
