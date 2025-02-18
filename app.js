@@ -12,8 +12,10 @@ const totalDividendsPaid = document.getElementById("totalDividendsPaid");
 const totalUsers = document.getElementById("totalUsers");
 const currentPoolBalance = document.getElementById("currentPoolBalance");
 const lotteryPool = document.getElementById("lotteryPool");
+const dailyRewards = document.getElementById("dailyRewards");
 const lastLotteryWinner = document.getElementById("lastLotteryWinner");
 const lastLotteryPrize = document.getElementById("lastLotteryPrize");
+const totalWithdrawn = document.getElementById("totalWithdrawn");
 
 const myDepositedAmount = document.getElementById("myDepositedAmount");
 const myTotalEarned = document.getElementById("myTotalEarned");
@@ -58,6 +60,10 @@ async function loadStats() {
         currentPoolBalance.textContent = `${web3.utils.fromWei(stats[2], 'ether')} BNB`;
         lotteryPool.textContent = `${web3.utils.fromWei(stats[8], 'ether')} BNB`;
 
+        // Calcular recompensas diarias (3% del total de la pool)
+        const dailyRewardsAmount = (stats[2] * 3) / 100;
+        dailyRewards.textContent = `${web3.utils.fromWei(dailyRewardsAmount.toString(), 'ether')} BNB`;
+
         // Obtener estadísticas del usuario
         const user = await contract.methods.users(userAddress).call();
         myDepositedAmount.textContent = `${web3.utils.fromWei(user.depositedAmount, 'ether')} BNB`;
@@ -72,6 +78,10 @@ async function loadStats() {
         // Obtener premio de la lotería
         const lastPrize = await contract.methods.getLastLotteryPrize().call();
         lastLotteryPrize.textContent = `${web3.utils.fromWei(lastPrize, 'ether')} BNB`;
+
+        // Obtener total retirado
+        const totalWithdrawnAmount = await contract.methods.totalWithdrawn().call();
+        totalWithdrawn.textContent = `${web3.utils.fromWei(totalWithdrawnAmount, 'ether')} BNB`;
 
         // Calcular tiempo para la próxima reclamación
         const lastClaimTime = user.lastClaimTime;
