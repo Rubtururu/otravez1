@@ -3,28 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BNB Pool</title>
+    <title>BNB Game</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>BNB Pool</h1>
-            <p>Deposita BNB y gana recompensas diarias.</p>
+    <div class="game-container">
+        <!-- Header del juego -->
+        <header class="game-header">
+            <h1>BNB Game</h1>
+            <p>Deposita, juega y gana recompensas.</p>
         </header>
 
-        <section class="stats">
+        <!-- Panel de estadísticas -->
+        <section class="game-stats">
             <div class="stat-card">
-                <h3>Total BNB Depositado</h3>
+                <h3>Total BNB</h3>
                 <p id="totalDeposited">0 BNB</p>
             </div>
             <div class="stat-card">
-                <h3>Total Recompensas Pagadas</h3>
+                <h3>Recompensas</h3>
                 <p id="totalDividendsPaid">0 BNB</p>
             </div>
             <div class="stat-card">
-                <h3>Usuarios Únicos</h3>
+                <h3>Usuarios</h3>
                 <p id="totalUsers">0</p>
             </div>
             <div class="stat-card">
@@ -32,54 +34,48 @@
                 <p id="currentPoolBalance">0 BNB</p>
             </div>
             <div class="stat-card">
-                <h3>Lotería Actual</h3>
+                <h3>Lotería</h3>
                 <p id="lotteryPool">0 BNB</p>
-            </div>
-            <div class="stat-card">
-                <h3>Último Ganador</h3>
-                <p id="lastLotteryWinner">--</p>
-            </div>
-            <div class="stat-card">
-                <h3>Premio de Lotería</h3>
-                <p id="lastLotteryPrize">--</p>
             </div>
         </section>
 
-        <section class="actions">
+        <!-- Panel de acciones -->
+        <section class="game-actions">
             <div class="action-card">
                 <h3>Depositar BNB</h3>
                 <input type="number" id="depositAmount" placeholder="Cantidad de BNB" min="0">
-                <input type="text" id="referrerAddress" placeholder="Dirección del referido (opcional)">
+                <input type="text" id="referrerAddress" placeholder="Referido (opcional)">
                 <button id="depositButton">Depositar</button>
             </div>
             <div class="action-card">
-                <h3>Reclamar Recompensas</h3>
-                <p id="nextClaimTime">Próxima reclamación en: --</p>
+                <h3>Reclamar</h3>
+                <p id="nextClaimTime">Próxima reclamación: --</p>
                 <button id="claimButton">Reclamar</button>
             </div>
             <div class="action-card">
-                <h3>Retirar BNB</h3>
+                <h3>Retirar</h3>
                 <input type="number" id="withdrawAmount" placeholder="Cantidad de BNB" min="0">
                 <button id="withdrawButton">Retirar</button>
             </div>
             <div class="action-card">
                 <h3>Lotería</h3>
-                <button id="drawLotteryButton">Sortear Lotería</button>
+                <button id="drawLotteryButton">Sortear</button>
             </div>
         </section>
 
-        <section class="user-stats">
+        <!-- Panel de usuario -->
+        <section class="game-user-stats">
             <h2>Mis Estadísticas</h2>
             <div class="user-stat-card">
                 <h3>BNB Depositado</h3>
                 <p id="myDepositedAmount">0 BNB</p>
             </div>
             <div class="user-stat-card">
-                <h3>Recompensas Acumuladas</h3>
+                <h3>Recompensas</h3>
                 <p id="myTotalEarned">0 BNB</p>
             </div>
             <div class="user-stat-card">
-                <h3>Ganancias por Referidos</h3>
+                <h3>Referidos</h3>
                 <p id="myReferralEarnings">0 BNB</p>
             </div>
             <div class="user-stat-card">
@@ -92,8 +88,9 @@
             </div>
         </section>
 
-        <footer>
-            <p>© 2023 BNB Pool. Todos los derechos reservados.</p>
+        <!-- Footer del juego -->
+        <footer class="game-footer">
+            <p>© 2023 BNB Game. Todos los derechos reservados.</p>
         </footer>
     </div>
 
