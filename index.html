@@ -1,93 +1,316 @@
-<!-- index.html -->
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <title>Weed Game - Producción & Quema</title>
-    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weed Farm Manager</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4CAF50;
+            --dark-bg: #121212;
+            --card-bg: #1E1E1E;
+            --text-primary: #FFFFFF;
+            --text-secondary: #888888;
+        }
+
+        body {
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .wallet-info {
+            background: var(--card-bg);
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .balance {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 12px;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .action-card {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .input-group {
+            margin: 1.5rem 0;
+        }
+
+        input {
+            width: 100%;
+            padding: 1rem;
+            background: #2A2A2A;
+            border: 1px solid #333;
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+
+        button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        button:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .loader {
+            display: none;
+            border: 3px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 3px solid var(--primary);
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--card-bg);
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: none;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <h1>🌿 Weed Farm</h1>
-        
-        <!-- Estadísticas Globales -->
-        <div class="stats-box global-stats">
-            <h2><i class="fas fa-globe"></i> Estadísticas del Contrato</h2>
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <label>Total BNB Invertido:</label>
-                    <span id="totalInvested">0</span>
+        <div class="header">
+            <h1><i class="fas fa-cannabis"></i> Weed Farm</h1>
+            <div class="wallet-info">
+                <div class="balance">
+                    <div><i class="fas fa-coins"></i> <span id="bnbBalance">0.000</span> BNB</div>
+                    <div><i class="fas fa-leaf"></i> <span id="weedBalance">0</span> WEED</div>
                 </div>
-                <div class="stat-item">
-                    <label>Weed Producido:</label>
-                    <span id="totalWeedProduced">0</span>
-                </div>
-                <div class="stat-item">
-                    <label>Weed Quemado:</label>
-                    <span id="totalBurned">0</span>
-                </div>
-                <div class="stat-item">
-                    <label>Última Distribución:</label>
-                    <span id="lastDistribution">0</span>
-                </div>
+                <button id="connectButton" onclick="connectWallet()"><i class="fas fa-wallet"></i> Conectar Wallet</button>
             </div>
         </div>
 
-        <!-- Estadísticas del Usuario -->
-        <div class="stats-box user-stats">
-            <h2><i class="fas fa-user"></i> Mis Estadísticas</h2>
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <label>BNB Invertido:</label>
-                    <span id="userInvested">0</span>
-                </div>
-                <div class="stat-item">
-                    <label>Weed Producido:</label>
-                    <span id="userWeedProduced">0</span>
-                </div>
-                <div class="stat-item">
-                    <label>Weed Quemado:</label>
-                    <span id="userBurned">0</span>
-                </div>
-                <div class="stat-item">
-                    <label>Recompensas Pendientes:</label>
-                    <span id="pendingRewards">0 BNB</span>
-                </div>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Total Invertido</div>
+                <div class="stat-value" id="totalInvested">0 BNB</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Weed Producido</div>
+                <div class="stat-value" id="totalWeed">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Weed Quemado</div>
+                <div class="stat-value" id="totalBurned">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Próximo Pago</div>
+                <div class="stat-value" id="nextPayout">00:00:00</div>
             </div>
         </div>
 
-        <!-- Interacciones -->
-        <div class="action-box">
+        <div class="actions-grid">
             <div class="action-card">
-                <h3><i class="fas fa-coins"></i> Comprar Unidades</h3>
-                <input type="number" id="bnbAmount" step="0.001" placeholder="BNB a invertir">
-                <button onclick="buyUnits()">Comprar</button>
-                <p>1 Unidad = 0.001 BNB (1 Weed/s)</p>
+                <h2><i class="fas fa-shopping-cart"></i> Comprar Unidades</h2>
+                <div class="input-group">
+                    <input type="number" id="buyAmount" step="0.001" placeholder="Cantidad en BNB">
+                </div>
+                <button onclick="buyUnits()">
+                    <span class="loader" id="buyLoader"></span>
+                    Comprar Unidades
+                </button>
+                <p class="info-text">1 Unidad = 0.001 BNB (1 WEED/s)</p>
             </div>
-            
+
             <div class="action-card">
-                <h3><i class="fas fa-fire"></i> Quemar Weed</h3>
-                <input type="number" id="weedToBurn" placeholder="Cantidad a quemar">
-                <button onclick="burnWeed()">Quemar</button>
-                <p>Participa en la pool de recompensas</p>
+                <h2><i class="fas fa-fire"></i> Quemar Weed</h2>
+                <div class="input-group">
+                    <input type="number" id="burnAmount" placeholder="Cantidad de Weed">
+                </div>
+                <button onclick="burnWeed()">
+                    <span class="loader" id="burnLoader"></span>
+                    Quemar Weed
+                </button>
+                <p class="info-text">Participa en la pool de recompensas</p>
             </div>
-            
+
             <div class="action-card">
-                <h3><i class="fas fa-wallet"></i> Reclamar Recompensas</h3>
-                <button onclick="claimRewards()">Reclamar Todo</button>
-                <p id="rewardsInfo">Disponible: 0 BNB</p>
+                <h2><i class="fas fa-hand-holding-usd"></i> Recompensas</h2>
+                <div class="rewards-info">
+                    <div>Disponibles: <span id="pendingRewards">0 BNB</span></div>
+                    <div>Histórico: <span id="totalRewards">0 BNB</span></div>
+                </div>
+                <button onclick="claimRewards()">
+                    <span class="loader" id="claimLoader"></span>
+                    Reclamar Todo
+                </button>
             </div>
         </div>
 
-        <!-- Admin Section -->
-        <div class="admin-box" id="adminSection">
-            <h3><i class="fas fa-toolbox"></i> Herramientas Admin</h3>
-            <button onclick="distributeDividends()">Distribuir Dividendos Diarios</button>
-            <p>Próxima distribución en: <span id="nextDistribution">-</span></p>
-        </div>
+        <div class="notification" id="notification"></div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
-    <script src="app.js"></script>
+    <script>
+        let web3, contract, account;
+        const CONTRACT_ADDRESS = '0xcB02cE74AeA8aC527d8952Fb0393965fdD3229c5'; // Tu dirección del contrato
+        const CONTRACT_ABI = [{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[],"name":"PRICE","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"burnWeed","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"buyUnits","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"claimRewards","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"distributeDividends","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"getGlobalStats","outputs":[{"internalType":"uint256[8]","name":"contractData","type":"uint256[8]"},{"internalType":"uint256","name":"currentBalance","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"getUserStats","outputs":[{"internalType":"uint256[6]","name":"userData","type":"uint256[6]"},{"internalType":"uint256[2]","name":"pendingRewards","type":"uint256[2]"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"stats","outputs":[{"internalType":"uint256","name":"totalInvested","type":"uint256"},{"internalType":"uint256","name":"totalWeedProduced","type":"uint256"},{"internalType":"uint256","name":"totalBurned","type":"uint256"},{"internalType":"uint256","name":"totalDividends","type":"uint256"},{"internalType":"uint256","name":"totalBurnRewards","type":"uint256"},{"internalType":"uint256","name":"lastDistribution","type":"uint256"},{"internalType":"uint256","name":"activeUsers","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"users","outputs":[{"internalType":"uint256","name":"invested","type":"uint256"},{"internalType":"uint256","name":"weedProduced","type":"uint256"},{"internalType":"uint256","name":"burned","type":"uint256"},{"internalType":"uint256","name":"dividendsReceived","type":"uint256"},{"internalType":"uint256","name":"burnRewards","type":"uint256"},{"internalType":"uint256","name":"lastUpdate","type":"uint256"}],"stateMutability":"view","type":"function"}]; // Tu ABI del contrato
+
+        async function connectWallet() {
+            if (window.ethereum) {
+                try {
+                    await window.ethereum.request({ method: 'eth_requestAccounts' });
+                    web3 = new Web3(window.ethereum);
+                    account = (await web3.eth.getAccounts())[0];
+                    initContract();
+                    updateUI();
+                    setInterval(updateUI, 5000);
+                } catch (error) {
+                    showNotification('Error al conectar la wallet');
+                }
+            } else {
+                showNotification('Por favor instala MetaMask');
+            }
+        }
+
+        function initContract() {
+            contract = new web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS);
+        }
+
+        async function updateUI() {
+            // Obtener y actualizar todos los datos del contrato
+            const userStats = await contract.methods.users(account).call();
+            const globalStats = await contract.methods.getGlobalStats().call();
+            
+            document.getElementById('bnbBalance').textContent = web3.utils.fromWei(userStats.invested, 'ether');
+            document.getElementById('weedBalance').textContent = userStats.weedProduced;
+            
+            document.getElementById('totalInvested').textContent = web3.utils.fromWei(globalStats.totalInvested, 'ether') + ' BNB';
+            document.getElementById('totalWeed').textContent = globalStats.totalWeedProduced;
+            document.getElementById('totalBurned').textContent = globalStats.totalBurned;
+        }
+
+        async function buyUnits() {
+            const amount = document.getElementById('buyAmount').value;
+            try {
+                showLoader('buyLoader');
+                await contract.methods.buyUnits().send({
+                    from: account,
+                    value: web3.utils.toWei(amount, 'ether')
+                });
+                updateUI();
+            } catch (error) {
+                showNotification('Error en la transacción');
+            } finally {
+                hideLoader('buyLoader');
+            }
+        }
+
+        async function burnWeed() {
+            const amount = document.getElementById('burnAmount').value;
+            try {
+                showLoader('burnLoader');
+                await contract.methods.burnWeed(amount).send({ from: account });
+                updateUI();
+            } catch (error) {
+                showNotification('Error al quemar Weed');
+            } finally {
+                hideLoader('burnLoader');
+            }
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.style.display = 'block';
+            setTimeout(() => notification.style.display = 'none', 3000);
+        }
+
+        function showLoader(id) {
+            document.getElementById(id).style.display = 'inline-block';
+        }
+
+        function hideLoader(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+
+        // Actualizar la UI cada 5 segundos
+        setInterval(updateUI, 5000);
+    </script>
 </body>
 </html>
