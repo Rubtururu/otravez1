@@ -1,94 +1,77 @@
 <!-- index.html -->
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Weed Game v2</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="container">
-        <!-- Header -->
-        <header>
-            <div class="wallet-info">
-                <span id="accountAddress"></span>
-                <div class="balances">
-                    <div class="balance-item">
-                        <i class="fab fa-btc"></i>
-                        <span id="bnbBalance">0</span> BNB
-                    </div>
-                    <div class="balance-item">
-                        <img src="weed-icon.png" class="weed-icon">
-                        <span id="weedBalance">0</span> WEED
-                    </div>
-                </div>
+<div class="container">
+    <div class="dashboard">
+        <!-- Sección de Estadísticas Globales -->
+        <div class="global-stats">
+            <div class="stat-card">
+                <h3><i class="fas fa-lock"></i> BNB Locked</h3>
+                <span id="totalBNB">0</span>
             </div>
-        </header>
+            <div class="stat-card">
+                <h3><i class="fas fa-cannabis"></i> Total Weed</h3>
+                <span id="totalWeed">0</span>
+            </div>
+            <div class="stat-card">
+                <h3><i class="fas fa-users"></i> Jugadores</h3>
+                <span id="totalPlayers">0</span>
+            </div>
+            <div class="stat-card">
+                <h3><i class="fas fa-fire"></i> Quemado 24h</h3>
+                <span id="dailyBurned">0</span>
+            </div>
+        </div>
 
-        <!-- Main Grid -->
-        <div class="grid-container">
-            <!-- Sección izquierda -->
-            <div class="left-panel">
-                <div class="stats-box">
-                    <h2><i class="fas fa-chart-line"></i> Estadísticas</h2>
-                    <div class="stats-grid">
-                        <div class="stat-item">
-                            <label>Producción/s:</label>
-                            <span id="productionRate">0</span>
-                        </div>
-                        <div class="stat-item">
-                            <label>Total invertido:</label>
-                            <span id="totalInvested">0</span> BNB
-                        </div>
-                        <div class="stat-item">
-                            <label>Dividendos:</label>
-                            <span id="pendingDividends">0</span> BNB
-                        </div>
-                        <div class="stat-item">
-                            <label>Quemado:</label>
-                            <span id="totalBurned">0</span> WEED
-                        </div>
-                    </div>
+        <!-- Gráficos -->
+        <div class="charts">
+            <canvas id="productionChart"></canvas>
+            <canvas id="burnChart"></canvas>
+        </div>
+
+        <!-- Detalles del Usuario -->
+        <div class="user-stats">
+            <div class="user-stat-column">
+                <h3><i class="fas fa-tachometer-alt"></i> Producción</h3>
+                <div class="stat-item">
+                    <label>Producción Actual:</label>
+                    <span id="currentProduction">0</span>/s
                 </div>
-
-                <div class="deposit-box">
-                    <h2><i class="fas fa-fire"></i> Goo Deposit Box</h2>
-                    <div class="input-group">
-                        <input type="number" id="weedToBurn" placeholder="Cantidad a quemar">
-                        <button onclick="burnWeed()" class="burn-button">Quemar WEED</button>
-                    </div>
-                    <div class="burn-stats">
-                        <div>Total quemado hoy: <span id="dailyBurned">0</span> WEED</div>
-                        <div>Tu share: <span id="burnShare">0%</span></div>
-                        <div>BNB estimado: <span id="estimatedBNB">0</span></div>
-                    </div>
+                <div class="stat-item">
+                    <label>Boost Activo:</label>
+                    <span id="currentBoost">1x</span>
+                </div>
+                <div class="stat-item">
+                    <label>Dividendos Pendientes:</label>
+                    <span id="pendingDividends">0</span> BNB
                 </div>
             </div>
 
-            <!-- Sección derecha -->
-            <div class="shop-section">
-                <h2><i class="fas fa-store"></i> Tienda de Personajes</h2>
-                <div class="characters-grid" id="charactersContainer">
-                    <!-- Personajes generados dinámicamente -->
+            <div class="user-stat-column">
+                <h3><i class="fas fa-coins"></i> Recompensas</h3>
+                <div class="stat-item">
+                    <label>Recompensas Quemado:</label>
+                    <span id="pendingBurnRewards">0</span> BNB
+                </div>
+                <div class="stat-item">
+                    <label>Referidos Activos:</label>
+                    <span id="referralCount">0</span>
+                </div>
+                <div class="stat-item">
+                    <label>Ganancias Equipo:</label>
+                    <span id="teamEarnings">0</span> BNB
                 </div>
             </div>
         </div>
 
-        <!-- Tablas adicionales -->
-        <div class="leaderboards">
-            <div class="leaderboard">
-                <h3><i class="fas fa-trophy"></i> Top Productores</h3>
-                <div id="producersRanking"></div>
+        <!-- Históricos -->
+        <div class="history">
+            <div class="transaction-history">
+                <h3>Últimas Transacciones</h3>
+                <div id="txHistory"></div>
             </div>
-            <div class="leaderboard">
-                <h3><i class="fas fa-fire"></i> Top Quemadores</h3>
-                <div id="burnersRanking"></div>
+            <div class="asset-history">
+                <h3>Evolución de Activos</h3>
+                <canvas id="wealthChart"></canvas>
             </div>
         </div>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="game.js"></script>
-</body>
-</html>
+</div>
