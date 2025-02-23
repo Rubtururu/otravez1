@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weed Farm Game</title>
+    <title>Weed Farm Stats</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
@@ -20,7 +20,6 @@
             font-family: 'Segoe UI', sans-serif;
             margin: 0;
             padding: 20px;
-            min-height: 100vh;
         }
 
         .container {
@@ -48,7 +47,7 @@
 
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 1.5rem;
             margin-bottom: 2rem;
         }
@@ -64,16 +63,23 @@
             transform: translateY(-3px);
         }
 
-        .actions-grid {
+        .stat-item {
+            margin: 0.5rem 0;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #333;
+            padding: 0.5rem 0;
+        }
+
+        .actions {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
+            gap: 1.5rem;
         }
 
         .action-card {
             background: var(--card-bg);
-            padding: 2rem;
+            padding: 1.5rem;
             border-radius: 12px;
             text-align: center;
         }
@@ -111,105 +117,94 @@
             padding: 1rem 2rem;
             border-radius: 8px;
             display: none;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-
-        .admin-panel {
-            background: #2a2a2a;
-            padding: 1.5rem;
-            border-radius: 12px;
-            margin-top: 2rem;
-            text-align: center;
-        }
-
-        .loader {
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid var(--primary);
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            animation: spin 1s linear infinite;
-            display: none;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1><i class="fas fa-cannabis"></i> Weed Farm</h1>
+            <h1><i class="fas fa-cannabis"></i> Weed Farm Stats</h1>
             <div class="wallet-info">
-                <div>
-                    <div>BNB: <span id="bnbBalance">0.000</span></div>
-                    <div>WEED: <span id="weedBalance">0</span></div>
-                </div>
-                <button onclick="connectWallet()" id="connectBtn">
-                    <i class="fas fa-wallet"></i> Conectar
-                </button>
+                <div id="walletInfo">No conectado</div>
+                <button onclick="connectWallet()" id="connectBtn">Conectar Wallet</button>
             </div>
         </div>
 
         <div class="stats-grid">
             <div class="stat-card">
                 <h3>🌍 Estadísticas Globales</h3>
-                <p>Total Invertido: <span id="totalInvested">0 BNB</span></p>
-                <p>Weed Producido: <span id="totalWeed">0</span></p>
-                <p>Weed Quemado: <span id="totalBurned">0</span></p>
+                <div class="stat-item">
+                    <span>Total Invertido:</span>
+                    <span id="totalInvested">0 BNB</span>
+                </div>
+                <div class="stat-item">
+                    <span>Weed Producido:</span>
+                    <span id="totalWeedProduced">0</span>
+                </div>
+                <div class="stat-item">
+                    <span>Weed Quemado:</span>
+                    <span id="totalBurned">0</span>
+                </div>
+                <div class="stat-item">
+                    <span>Dividendos Repartidos:</span>
+                    <span id="totalDividends">0 BNB</span>
+                </div>
+                <div class="stat-item">
+                    <span>Recompensas Quemado:</span>
+                    <span id="totalBurnRewards">0 BNB</span>
+                </div>
+                <div class="stat-item">
+                    <span>Usuarios Activos:</span>
+                    <span id="activeUsers">0</span>
+                </div>
             </div>
-            
+
             <div class="stat-card">
                 <h3>👤 Tus Estadísticas</h3>
-                <p>Inversión: <span id="userInvested">0 BNB</span></p>
-                <p>Producción/s: <span id="productionRate">0</span></p>
-                <p>Quemado: <span id="userBurned">0</span></p>
-            </div>
-            
-            <div class="stat-card">
-                <h3>💰 Recompensas</h3>
-                <p>Pendientes: <span id="pendingRewards">0 BNB</span></p>
-                <p>Histórico: <span id="totalRewards">0 BNB</span></p>
-                <p>Siguiente Pago: <span id="nextPayout">00:00:00</span></p>
+                <div class="stat-item">
+                    <span>Invertido:</span>
+                    <span id="userInvested">0 BNB</span>
+                </div>
+                <div class="stat-item">
+                    <span>Weed Producido:</span>
+                    <span id="userWeedProduced">0</span>
+                </div>
+                <div class="stat-item">
+                    <span>Weed Quemado:</span>
+                    <span id="userBurned">0</span>
+                </div>
+                <div class="stat-item">
+                    <span>Dividendos Recibidos:</span>
+                    <span id="userDividends">0 BNB</span>
+                </div>
+                <div class="stat-item">
+                    <span>Recompensas Quemado:</span>
+                    <span id="userBurnRewards">0 BNB</span>
+                </div>
+                <div class="stat-item">
+                    <span>Recompensas Pendientes:</span>
+                    <span id="pendingRewards">0 BNB</span>
+                </div>
             </div>
         </div>
 
-        <div class="actions-grid">
+        <div class="actions">
             <div class="action-card">
                 <h3>🛒 Comprar Unidades</h3>
-                <input type="number" id="buyAmount" step="0.001" placeholder="BNB">
-                <button onclick="buyUnits()">
-                    <span class="loader" id="buyLoader"></span>
-                    Comprar (0.001 BNB/unidad)
-                </button>
+                <input type="number" id="buyAmount" step="0.001" placeholder="BNB a invertir">
+                <button onclick="buyUnits()">Comprar (0.001 BNB/unidad)</button>
             </div>
-            
+
             <div class="action-card">
                 <h3>🔥 Quemar Weed</h3>
-                <input type="number" id="burnAmount" placeholder="Cantidad">
-                <button onclick="burnWeed()">
-                    <span class="loader" id="burnLoader"></span>
-                    Quemar
-                </button>
+                <input type="number" id="burnAmount" placeholder="Cantidad de Weed">
+                <button onclick="burnWeed()">Quemar</button>
             </div>
-            
-            <div class="action-card">
-                <h3>💸 Reclamar</h3>
-                <button onclick="claimRewards()">
-                    <span class="loader" id="claimLoader"></span>
-                    Reclamar Todo
-                </button>
-            </div>
-        </div>
 
-        <div id="adminPanel" class="admin-panel" style="display: none;">
-            <h3>🔧 Panel Admin</h3>
-            <button onclick="distributeDividends()">
-                <span class="loader" id="distributeLoader"></span>
-                Distribuir Dividendos
-            </button>
+            <div class="action-card">
+                <h3>💸 Reclamar Recompensas</h3>
+                <button onclick="claimRewards()">Reclamar Todo</button>
+            </div>
         </div>
 
         <div id="notification" class="notification"></div>
@@ -218,158 +213,93 @@
     <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
     <script>
         let web3, contract, account;
-        const CONTRACT_ADDRESS = '0xcB02cE74AeA8aC527d8952Fb0393965fdD3229c5'; // Tu dirección del contrato
-        const CONTRACT_ABI = [{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[],"name":"PRICE","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"burnWeed","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"buyUnits","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"claimRewards","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"distributeDividends","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"getGlobalStats","outputs":[{"internalType":"uint256[8]","name":"contractData","type":"uint256[8]"},{"internalType":"uint256","name":"currentBalance","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"getUserStats","outputs":[{"internalType":"uint256[6]","name":"userData","type":"uint256[6]"},{"internalType":"uint256[2]","name":"pendingRewards","type":"uint256[2]"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"stats","outputs":[{"internalType":"uint256","name":"totalInvested","type":"uint256"},{"internalType":"uint256","name":"totalWeedProduced","type":"uint256"},{"internalType":"uint256","name":"totalBurned","type":"uint256"},{"internalType":"uint256","name":"totalDividends","type":"uint256"},{"internalType":"uint256","name":"totalBurnRewards","type":"uint256"},{"internalType":"uint256","name":"lastDistribution","type":"uint256"},{"internalType":"uint256","name":"activeUsers","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"users","outputs":[{"internalType":"uint256","name":"invested","type":"uint256"},{"internalType":"uint256","name":"weedProduced","type":"uint256"},{"internalType":"uint256","name":"burned","type":"uint256"},{"internalType":"uint256","name":"dividendsReceived","type":"uint256"},{"internalType":"uint256","name":"burnRewards","type":"uint256"},{"internalType":"uint256","name":"lastUpdate","type":"uint256"}],"stateMutability":"view","type":"function"}]; // Tu ABI del contrato
+        const CONTRACT_ADDRESS = '0xcB02cE74AeA8aC527d8952Fb0393965fdD3229c5';
+        const CONTRACT_ABI = [{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[],"name":"PRICE","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"burnWeed","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"buyUnits","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"claimRewards","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"distributeDividends","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"getGlobalStats","outputs":[{"internalType":"uint256[8]","name":"contractData","type":"uint256[8]"},{"internalType":"uint256","name":"currentBalance","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"getUserStats","outputs":[{"internalType":"uint256[6]","name":"userData","type":"uint256[6]"},{"internalType":"uint256[2]","name":"pendingRewards","type":"uint256[2]"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"stats","outputs":[{"internalType":"uint256","name":"totalInvested","type":"uint256"},{"internalType":"uint256","name":"totalWeedProduced","type":"uint256"},{"internalType":"uint256","name":"totalBurned","type":"uint256"},{"internalType":"uint256","name":"totalDividends","type":"uint256"},{"internalType":"uint256","name":"totalBurnRewards","type":"uint256"},{"internalType":"uint256","name":"lastDistribution","type":"uint256"},{"internalType":"uint256","name":"activeUsers","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"users","outputs":[{"internalType":"uint256","name":"invested","type":"uint256"},{"internalType":"uint256","name":"weedProduced","type":"uint256"},{"internalType":"uint256","name":"burned","type":"uint256"},{"internalType":"uint256","name":"dividendsReceived","type":"uint256"},{"internalType":"uint256","name":"burnRewards","type":"uint256"},{"internalType":"uint256","name":"lastUpdate","type":"uint256"}],"stateMutability":"view","type":"function"}];
 
         async function connectWallet() {
-            try {
-                if (!window.ethereum) throw new Error('Instala MetaMask');
-                
-                await window.ethereum.request({ method: 'eth_requestAccounts' });
-                web3 = new Web3(window.ethereum);
-                [account] = await web3.eth.getAccounts();
-                
-                initContract();
-                setupEventListeners();
-                updateAllData();
-                setInterval(updateAllData, 3000);
-                checkAdmin();
-                
-                document.getElementById('connectBtn').innerHTML = `<i class="fas fa-wallet"></i> ${account.slice(0,6)}...${account.slice(-4)}`;
-            } catch (error) {
-                showNotification(error.message, 'error');
+            if (window.ethereum) {
+                try {
+                    await window.ethereum.request({ method: 'eth_requestAccounts' });
+                    web3 = new Web3(window.ethereum);
+                    account = (await web3.eth.getAccounts())[0];
+                    initContract();
+                    updateAllStats();
+                    setInterval(updateAllStats, 3000);
+                    document.getElementById('connectBtn').textContent = account.slice(0,6) + '...' + account.slice(-4);
+                } catch (error) {
+                    showNotification('Error al conectar: ' + error.message, 'error');
+                }
+            } else {
+                showNotification('Por favor instala MetaMask', 'error');
             }
         }
 
         function initContract() {
             contract = new web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS);
+            
+            contract.events.Bought({ from: account })
+                .on('data', updateAllStats);
+            
+            contract.events.Burned({ from: account })
+                .on('data', updateAllStats);
         }
 
-        async function updateAllData() {
+        async function updateAllStats() {
             try {
-                // Obtener datos del contrato
-                const [
-                    totalInvested, 
-                    totalWeedProduced, 
-                    totalBurned,
-                    userData,
-                    pendingRewards,
-                    balance,
-                    lastDistribution
-                ] = await Promise.all([
-                    contract.methods.totalInvested().call(),
-                    contract.methods.totalWeedProduced().call(),
-                    contract.methods.totalBurned().call(),
-                    contract.methods.users(account).call(),
-                    contract.methods.pendingRewards(account).call(),
-                    web3.eth.getBalance(account),
-                    contract.methods.lastDistribution().call()
-                ]);
+                // Obtener estadísticas globales
+                const globalStats = await contract.methods.getGlobalStats().call();
+                document.getElementById('totalInvested').textContent = web3.utils.fromWei(globalStats[0], 'ether') + ' BNB';
+                document.getElementById('totalWeedProduced').textContent = web3.utils.fromWei(globalStats[1], 'ether');
+                document.getElementById('totalBurned').textContent = web3.utils.fromWei(globalStats[2], 'ether');
+                document.getElementById('totalDividends').textContent = web3.utils.fromWei(globalStats[3], 'ether') + ' BNB';
+                document.getElementById('totalBurnRewards').textContent = web3.utils.fromWei(globalStats[4], 'ether') + ' BNB';
+                document.getElementById('activeUsers').textContent = globalStats[6];
 
-                // Actualizar UI
-                document.getElementById('totalInvested').textContent = web3.utils.fromWei(totalInvested, 'ether') + ' BNB';
-                document.getElementById('totalWeed').textContent = web3.utils.fromWei(totalWeedProduced, 'ether');
-                document.getElementById('totalBurned').textContent = web3.utils.fromWei(totalBurned, 'ether');
-                
-                document.getElementById('userInvested').textContent = web3.utils.fromWei(userData.invested, 'ether') + ' BNB';
-                document.getElementById('productionRate').textContent = web3.utils.fromWei(userData.weedProduced, 'ether') + '/s';
-                document.getElementById('userBurned').textContent = web3.utils.fromWei(userData.burned, 'ether');
-                
-                document.getElementById('pendingRewards').textContent = web3.utils.fromWei(pendingRewards, 'ether') + ' BNB';
-                document.getElementById('bnbBalance').textContent = web3.utils.fromWei(balance, 'ether');
-                document.getElementById('weedBalance').textContent = web3.utils.fromWei(userData.weedProduced, 'ether');
-                
-                updateCountdown(parseInt(lastDistribution) + 86400);
-                
+                // Obtener estadísticas del usuario
+                const userStats = await contract.methods.getUserStats(account).call();
+                document.getElementById('userInvested').textContent = web3.utils.fromWei(userStats[0][0], 'ether') + ' BNB';
+                document.getElementById('userWeedProduced').textContent = web3.utils.fromWei(userStats[0][1], 'ether');
+                document.getElementById('userBurned').textContent = web3.utils.fromWei(userStats[0][2], 'ether');
+                document.getElementById('userDividends').textContent = web3.utils.fromWei(userStats[0][3], 'ether') + ' BNB';
+                document.getElementById('userBurnRewards').textContent = web3.utils.fromWei(userStats[0][4], 'ether') + ' BNB';
+                document.getElementById('pendingRewards').textContent = 
+                    (parseFloat(web3.utils.fromWei(userStats[1][0], 'ether')) + 
+                     parseFloat(web3.utils.fromWei(userStats[1][1], 'ether'))).toFixed(6) + ' BNB';
+
             } catch (error) {
-                console.error('Error actualizando datos:', error);
+                console.error('Error actualizando estadísticas:', error);
             }
         }
 
         async function buyUnits() {
             const amount = document.getElementById('buyAmount').value;
             try {
-                showLoader('buyLoader');
                 await contract.methods.buyUnits().send({
                     from: account,
                     value: web3.utils.toWei(amount, 'ether')
                 });
-                showNotification('¡Unidades compradas!', 'success');
+                showNotification('Unidades compradas exitosamente!', 'success');
             } catch (error) {
-                showNotification(error.message, 'error');
-            } finally {
-                hideLoader('buyLoader');
+                showNotification('Error: ' + error.message, 'error');
             }
         }
 
         async function burnWeed() {
             const amount = document.getElementById('burnAmount').value;
             try {
-                showLoader('burnLoader');
                 await contract.methods.burnWeed(web3.utils.toWei(amount, 'ether')).send({ from: account });
-                showNotification('Weed quemado!', 'success');
+                showNotification('Weed quemado exitosamente!', 'success');
             } catch (error) {
-                showNotification(error.message, 'error');
-            } finally {
-                hideLoader('burnLoader');
+                showNotification('Error: ' + error.message, 'error');
             }
         }
 
         async function claimRewards() {
             try {
-                showLoader('claimLoader');
                 await contract.methods.claimRewards().send({ from: account });
                 showNotification('Recompensas reclamadas!', 'success');
             } catch (error) {
-                showNotification(error.message, 'error');
-            } finally {
-                hideLoader('claimLoader');
-            }
-        }
-
-        async function distributeDividends() {
-            try {
-                showLoader('distributeLoader');
-                await contract.methods.distributeDividends().send({ from: account });
-                showNotification('Dividendos distribuidos!', 'success');
-            } catch (error) {
-                showNotification(error.message, 'error');
-            } finally {
-                hideLoader('distributeLoader');
-            }
-        }
-
-        function updateCountdown(nextTimestamp) {
-            const now = Math.floor(Date.now() / 1000);
-            const diff = nextTimestamp - now;
-            
-            if(diff <= 0) {
-                document.getElementById('nextPayout').textContent = 'AHORA';
-                return;
-            }
-            
-            const hours = Math.floor(diff / 3600);
-            const minutes = Math.floor((diff % 3600) / 60);
-            const seconds = diff % 60;
-            
-            document.getElementById('nextPayout').textContent = 
-                `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-        }
-
-        function setupEventListeners() {
-            contract.events.Bought({ from: account })
-                .on('data', updateAllData)
-                .on('error', console.error);
-
-            contract.events.Burned({ from: account })
-                .on('data', updateAllData)
-                .on('error', console.error);
-        }
-
-        async function checkAdmin() {
-            const owner = await contract.methods.owner().call();
-            if(owner.toLowerCase() === account.toLowerCase()) {
-                document.getElementById('adminPanel').style.display = 'block';
+                showNotification('Error: ' + error.message, 'error');
             }
         }
 
@@ -379,14 +309,6 @@
             notification.className = `notification ${type}`;
             notification.style.display = 'block';
             setTimeout(() => notification.style.display = 'none', 5000);
-        }
-
-        function showLoader(id) {
-            document.getElementById(id).style.display = 'inline-block';
-        }
-
-        function hideLoader(id) {
-            document.getElementById(id).style.display = 'none';
         }
 
         // Inicialización
