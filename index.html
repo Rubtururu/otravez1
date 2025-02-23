@@ -3,66 +3,265 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weed Farm Idle</title>
+    <title>Weed Farm Tycoon</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        :root {
+            --primary: #4CAF50;
+            --secondary: #8BC34A;
+            --dark: #1a2e1a;
+            --darker: #0d1a0d;
+            --accent: #FFD700;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: var(--darker);
+            color: white;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        .wallet-info {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .balance-card {
+            background: var(--dark);
+            padding: 15px;
+            border-radius: 10px;
+            min-width: 180px;
+            text-align: center;
+            border: 1px solid var(--primary);
+        }
+
+        /* Main Grid */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            background: rgba(0,0,0,0.3);
+            padding: 25px;
+            border-radius: 15px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .stat-item {
+            background: var(--dark);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid var(--primary);
+        }
+
+        /* Shop Section */
+        .shop-section {
+            margin-top: 30px;
+        }
+
+        .shop-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .shop-item {
+            background: rgba(0,0,0,0.3);
+            padding: 20px;
+            border-radius: 15px;
+            transition: transform 0.3s;
+        }
+
+        .shop-item:hover {
+            transform: translateY(-5px);
+            border: 1px solid var(--primary);
+        }
+
+        /* Leaderboard */
+        .leaderboard-section {
+            background: rgba(0,0,0,0.3);
+            padding: 25px;
+            border-radius: 15px;
+            height: fit-content;
+        }
+
+        .leaderboard-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px;
+            margin: 10px 0;
+            background: var(--dark);
+            border-radius: 8px;
+        }
+
+        /* Modals */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--dark);
+            padding: 30px;
+            border-radius: 15px;
+            z-index: 1000;
+            border: 2px solid var(--primary);
+        }
+
+        .modal input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            background: var(--darker);
+            border: 1px solid var(--primary);
+            color: white;
+            border-radius: 5px;
+        }
+
+        /* Botones */
+        .btn {
+            background: var(--primary);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background: var(--secondary);
+            box-shadow: 0 0 15px rgba(76, 175, 80, 0.3);
+        }
+
+        /* Animaciones */
+        @keyframes plantFloat {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0); }
+        }
+
+        .plant-icon {
+            font-size: 50px;
+            animation: plantFloat 3s infinite;
+            color: var(--primary);
+            margin: 20px 0;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <header>
+        <header class="header">
             <h1><i class="fas fa-cannabis"></i> Weed Farm</h1>
-            <div class="wallet-section">
-                <button id="connectBtn"><i class="fas fa-wallet"></i> Conectar Billetera</button>
-                <div class="balances">
-                    <div class="balance-item">
-                        <i class="fas fa-leaf"></i> <span id="weedBalance">0</span> WEED
-                    </div>
-                    <div class="balance-item">
-                        <i class="fab fa-btc"></i> <span id="bnbBalance">0.00</span> BNB
-                    </div>
+            <div class="wallet-info">
+                <button id="connectBtn" class="btn"><i class="fas fa-wallet"></i> Conectar Wallet</button>
+                <div class="balance-card">
+                    <p><i class="fas fa-leaf"></i> WEED: <span id="weedBalance">0</span></p>
+                    <p><i class="fab fa-btc"></i> BNB: <span id="bnbBalance">0.00</span></p>
                 </div>
             </div>
         </header>
 
-        <main>
-            <div class="game-panel">
-                <div class="production-area">
-                    <div class="weed-plant" id="mainPlant">
-                        <div class="plant-animation"></div>
-                        <div class="production-rate">
-                            <span id="productionRate">0</span>/s
-                        </div>
+        <main class="main-grid">
+            <!-- Sección Izquierda -->
+            <div class="stats-section">
+                <h2><i class="fas fa-chart-line"></i> Estadísticas</h2>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <h3>Producción/s</h3>
+                        <p id="productionRate">0</p>
                     </div>
-                    <div class="actions">
-                        <button onclick="harvestWeed()" class="action-btn">
-                            <i class="fas fa-hand-holding-water"></i> Cosechar
-                        </button>
-                        <button onclick="showBurnModal()" class="action-btn">
-                            <i class="fas fa-fire"></i> Quemar
-                        </button>
+                    <div class="stat-item">
+                        <h3>Plantas Totales</h3>
+                        <p id="totalPlants">0</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>WEED Quemado</h3>
+                        <p id="totalBurned">0</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>Bonos Referidos</h3>
+                        <p id="referralBonus">0 BNB</p>
                     </div>
                 </div>
 
-                <div class="shop">
-                    <h2><i class="fas fa-store"></i> Tienda de Plantas</h2>
-                    <div class="plant-items" id="plantShop"></div>
+                <div class="shop-section">
+                    <h2><i class="fas fa-shopping-cart"></i> Tienda</h2>
+                    <div class="shop-grid" id="shopPlants"></div>
+                    <h3 style="margin-top: 30px;">Mejoras</h3>
+                    <div class="shop-grid" id="shopUpgrades"></div>
                 </div>
             </div>
 
-            <div class="leaderboard">
-                <h2><i class="fas fa-trophy"></i> Top Farmers</h2>
-                <div id="topPlayers"></div>
+            <!-- Sección Derecha -->
+            <div class="leaderboard-section">
+                <h2><i class="fas fa-trophy"></i> Leaderboard</h2>
+                <div id="leaderboard"></div>
+                
+                <h3 style="margin-top: 30px;">Acciones Rápidas</h3>
+                <button class="btn" onclick="harvestWeed()" style="width: 100%; margin: 10px 0;">
+                    <i class="fas fa-hand-holding-water"></i> Cosechar
+                </button>
+                <button class="btn" onclick="showBurnModal()" style="width: 100%; margin: 10px 0;">
+                    <i class="fas fa-fire"></i> Quemar WEED
+                </button>
+                <button class="btn" onclick="claimReferralBonus()" style="width: 100%; margin: 10px 0;">
+                    <i class="fas fa-gift"></i> Reclamar Bonos
+                </button>
             </div>
         </main>
 
-        <!-- Modal para quemar WEED -->
+        <!-- Modales -->
         <div id="burnModal" class="modal">
             <div class="modal-content">
-                <span class="close" onclick="closeBurnModal()">&times;</span>
                 <h2><i class="fas fa-fire"></i> Quemar WEED</h2>
-                <input type="number" id="burnAmount" placeholder="Cantidad a quemar" min="0">
+                <input type="number" id="burnAmount" placeholder="Cantidad a quemar">
                 <p>Recibirás: <span id="bnbAmount">0</span> BNB</p>
-                <button onclick="burnWeed()" class="action-btn">Confirmar</button>
+                <button class="btn" onclick="burnWeed()">Confirmar</button>
+                <button class="btn" onclick="closeModal('burnModal')">Cancelar</button>
+            </div>
+        </div>
+
+        <div id="registerModal" class="modal">
+            <div class="modal-content">
+                <h2><i class="fas fa-user-plus"></i> Registro</h2>
+                <input type="text" id="username" placeholder="Nombre de granjero">
+                <input type="text" id="referrer" placeholder="Referido (opcional)">
+                <button class="btn" onclick="register()">Registrarse</button>
             </div>
         </div>
     </div>
