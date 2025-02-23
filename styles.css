@@ -1,167 +1,87 @@
+/* style.css */
 :root {
-    --primary: #4CAF50;
-    --secondary: #8BC34A;
-    --dark: #1a2e1a;
-    --darker: #0d1a0d;
-}
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Arial', sans-serif;
+    --primary-color: #4CAF50;
+    --background-dark: #121212;
+    --card-background: #1E1E1E;
+    --text-primary: #FFFFFF;
+    --text-secondary: #888888;
 }
 
 body {
-    background: var(--darker);
-    color: #fff;
-    line-height: 1.6;
+    background-color: var(--background-dark);
+    color: var(--text-primary);
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 20px;
 }
 
 .container {
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 30px;
+    margin-top: 30px;
+}
+
+.stats-box, .deposit-box {
+    background: var(--card-background);
+    border-radius: 15px;
     padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 0;
-    border-bottom: 2px solid var(--primary);
-    margin-bottom: 30px;
-}
-
-.wallet-section {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
-
-.balances {
-    display: flex;
-    gap: 15px;
-}
-
-.balance-item {
-    background: rgba(0,0,0,0.3);
-    padding: 10px 20px;
-    border-radius: 8px;
-    border: 1px solid var(--primary);
-}
-
-button {
+.character-card {
+    background: linear-gradient(145deg, #2d2d2d, #252525);
+    border-radius: 12px;
+    padding: 15px;
+    margin: 10px;
+    transition: transform 0.3s;
     cursor: pointer;
-    transition: all 0.3s;
 }
 
-.action-btn {
-    background: var(--primary);
+.character-card:hover {
+    transform: translateY(-5px);
+}
+
+.burn-button {
+    background: #ff5722;
+    color: white;
     border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.input-group {
+    display: flex;
+    gap: 10px;
+    margin: 15px 0;
+}
+
+input[type="number"] {
+    flex: 1;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #333;
+    background: #2a2a2a;
     color: white;
 }
 
-.action-btn:hover {
-    background: var(--secondary);
-    transform: translateY(-2px);
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
 }
 
-.game-panel {
+.leaderboards {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 30px;
-    margin-bottom: 40px;
-}
-
-.production-area {
-    text-align: center;
-    padding: 30px;
-    background: rgba(0,0,0,0.3);
-    border-radius: 15px;
-}
-
-.weed-plant {
-    position: relative;
-    margin: 20px 0;
-}
-
-.plant-animation {
-    width: 200px;
-    height: 200px;
-    margin: 0 auto;
-    background: url('plant.png') center/contain no-repeat;
-    animation: float 3s ease-in-out infinite;
-}
-
-@keyframes float {
-    0% { transform: translateY(0); }
-    50% { transform: translateY(-20px); }
-    100% { transform: translateY(0); }
-}
-
-.shop {
-    background: rgba(0,0,0,0.3);
-    padding: 20px;
-    border-radius: 15px;
-}
-
-.plant-items {
-    display: grid;
-    gap: 15px;
-    margin-top: 20px;
-}
-
-.plant-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px;
-    background: rgba(0,0,0,0.5);
-    border-radius: 8px;
-}
-
-.modal {
-    display: none;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: var(--dark);
-    padding: 30px;
-    border-radius: 15px;
-    z-index: 1000;
-}
-
-.modal-content {
-    position: relative;
-}
-
-.close {
-    position: absolute;
-    top: 10px;
-    right: 20px;
-    font-size: 28px;
-    cursor: pointer;
-}
-
-.leaderboard {
-    background: rgba(0,0,0,0.3);
-    padding: 20px;
-    border-radius: 15px;
-}
-
-#topPlayers {
-    margin-top: 15px;
-}
-
-.leaderboard-item {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px;
-    margin: 5px 0;
-    background: rgba(0,0,0,0.5);
-    border-radius: 5px;
+    margin-top: 30px;
 }
