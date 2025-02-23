@@ -1,73 +1,68 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weed Farm Tycoon</title>
+    <title>Weed Farm Idle</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="game-container">
-        <div class="farm-background">
-            <div class="animated-plants" id="animatedPlants"></div>
-            <div class="particle-effect" id="particles"></div>
-        </div>
-        
-        <div class="game-ui">
-            <!-- Header Section -->
-            <div class="game-header">
-                <div class="player-info">
-                    <div class="username" id="username">Guest</div>
-                    <div class="balances">
-                        <div class="balance-item weed-balance">
-                            <i class="fas fa-cannabis"></i>
-                            <span id="weedBalance">0</span>
-                        </div>
-                        <div class="balance-item bnb-balance">
-                            <i class="fab fa-btc"></i>
-                            <span id="bnbBalance">0.00</span>
-                        </div>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-cannabis"></i> Weed Farm</h1>
+            <div class="wallet-section">
+                <button id="connectBtn"><i class="fas fa-wallet"></i> Conectar Billetera</button>
+                <div class="balances">
+                    <div class="balance-item">
+                        <i class="fas fa-leaf"></i> <span id="weedBalance">0</span> WEED
+                    </div>
+                    <div class="balance-item">
+                        <i class="fab fa-btc"></i> <span id="bnbBalance">0.00</span> BNB
                     </div>
                 </div>
-                <button class="connect-btn" id="connectBtn">
-                    <i class="fas fa-wallet"></i> Connect Wallet
-                </button>
             </div>
+        </header>
 
-            <!-- Main Content -->
-            <div class="main-content">
-                <!-- Production Section -->
-                <div class="production-panel">
-                    <div class="production-header">
-                        <h2><i class="fas fa-chart-line"></i> Production</h2>
+        <main>
+            <div class="game-panel">
+                <div class="production-area">
+                    <div class="weed-plant" id="mainPlant">
+                        <div class="plant-animation"></div>
                         <div class="production-rate">
                             <span id="productionRate">0</span>/s
                         </div>
                     </div>
-                    <div class="plants-grid" id="plantsGrid"></div>
+                    <div class="actions">
+                        <button onclick="harvestWeed()" class="action-btn">
+                            <i class="fas fa-hand-holding-water"></i> Cosechar
+                        </button>
+                        <button onclick="showBurnModal()" class="action-btn">
+                            <i class="fas fa-fire"></i> Quemar
+                        </button>
+                    </div>
                 </div>
 
-                <!-- Shop Section -->
-                <div class="shop-panel">
-                    <h2><i class="fas fa-shopping-cart"></i> Plant Shop</h2>
-                    <div class="plants-shop" id="plantsShop"></div>
-                </div>
-
-                <!-- Leaderboard Section -->
-                <div class="leaderboard-panel">
-                    <h2><i class="fas fa-trophy"></i> Top Growers</h2>
-                    <div class="leaderboard-list" id="leaderboard"></div>
+                <div class="shop">
+                    <h2><i class="fas fa-store"></i> Tienda de Plantas</h2>
+                    <div class="plant-items" id="plantShop"></div>
                 </div>
             </div>
-        </div>
 
-        <!-- Modals -->
-        <div class="modal" id="registrationModal">
+            <div class="leaderboard">
+                <h2><i class="fas fa-trophy"></i> Top Farmers</h2>
+                <div id="topPlayers"></div>
+            </div>
+        </main>
+
+        <!-- Modal para quemar WEED -->
+        <div id="burnModal" class="modal">
             <div class="modal-content">
-                <h2>Register Your Farm</h2>
-                <input type="text" id="usernameInput" placeholder="Enter your farm name">
-                <button onclick="register()">Start Farming!</button>
+                <span class="close" onclick="closeBurnModal()">&times;</span>
+                <h2><i class="fas fa-fire"></i> Quemar WEED</h2>
+                <input type="number" id="burnAmount" placeholder="Cantidad a quemar" min="0">
+                <p>Recibirás: <span id="bnbAmount">0</span> BNB</p>
+                <button onclick="burnWeed()" class="action-btn">Confirmar</button>
             </div>
         </div>
     </div>
