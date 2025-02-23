@@ -27,25 +27,7 @@
             margin: 0 auto;
         }
 
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .wallet-info {
-            background: var(--card-bg);
-            padding: 1rem 2rem;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-        }
-
-        .stats-grid {
+        .stats-section {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 1.5rem;
@@ -56,31 +38,22 @@
             background: var(--card-bg);
             padding: 1.5rem;
             border-radius: 12px;
-            transition: transform 0.3s ease;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-3px);
+            margin-bottom: 1.5rem;
         }
 
         .stat-item {
-            margin: 0.5rem 0;
             display: flex;
             justify-content: space-between;
-            border-bottom: 1px solid #333;
+            margin: 0.8rem 0;
             padding: 0.5rem 0;
-        }
-
-        .actions {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
+            border-bottom: 1px solid #333;
         }
 
         .action-card {
             background: var(--card-bg);
             padding: 1.5rem;
             border-radius: 12px;
+            margin-bottom: 1.5rem;
             text-align: center;
         }
 
@@ -102,6 +75,7 @@
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.3s ease;
+            margin: 0.5rem 0;
         }
 
         button:hover {
@@ -109,30 +83,25 @@
             transform: translateY(-2px);
         }
 
-        .notification {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
+        .wallet-info {
             background: var(--card-bg);
-            padding: 1rem 2rem;
-            border-radius: 8px;
-            display: none;
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            text-align: center;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1><i class="fas fa-cannabis"></i> Weed Farm Stats</h1>
-            <div class="wallet-info">
-                <div id="walletInfo">No conectado</div>
-                <button onclick="connectWallet()" id="connectBtn">Conectar Wallet</button>
-            </div>
+        <div class="wallet-info">
+            <button onclick="connectWallet()" id="connectBtn">Conectar Wallet</button>
+            <div id="accountInfo" style="margin-top: 1rem;"></div>
         </div>
 
-        <div class="stats-grid">
+        <div class="stats-section">
             <div class="stat-card">
-                <h3>🌍 Estadísticas Globales</h3>
+                <h3><i class="fas fa-globe"></i> Estadísticas Globales</h3>
                 <div class="stat-item">
                     <span>Total Invertido:</span>
                     <span id="totalInvested">0 BNB</span>
@@ -160,7 +129,7 @@
             </div>
 
             <div class="stat-card">
-                <h3>👤 Tus Estadísticas</h3>
+                <h3><i class="fas fa-user"></i> Tus Estadísticas</h3>
                 <div class="stat-item">
                     <span>Invertido:</span>
                     <span id="userInvested">0 BNB</span>
@@ -188,26 +157,22 @@
             </div>
         </div>
 
-        <div class="actions">
-            <div class="action-card">
-                <h3>🛒 Comprar Unidades</h3>
-                <input type="number" id="buyAmount" step="0.001" placeholder="BNB a invertir">
-                <button onclick="buyUnits()">Comprar (0.001 BNB/unidad)</button>
-            </div>
-
-            <div class="action-card">
-                <h3>🔥 Quemar Weed</h3>
-                <input type="number" id="burnAmount" placeholder="Cantidad de Weed">
-                <button onclick="burnWeed()">Quemar</button>
-            </div>
-
-            <div class="action-card">
-                <h3>💸 Reclamar Recompensas</h3>
-                <button onclick="claimRewards()">Reclamar Todo</button>
-            </div>
+        <div class="action-card">
+            <h3><i class="fas fa-shopping-cart"></i> Comprar Unidades</h3>
+            <input type="number" id="buyAmount" step="0.001" placeholder="Cantidad en BNB">
+            <button onclick="buyUnits()">Comprar (0.001 BNB/unidad)</button>
         </div>
 
-        <div id="notification" class="notification"></div>
+        <div class="action-card">
+            <h3><i class="fas fa-fire"></i> Quemar Weed</h3>
+            <input type="number" id="burnAmount" placeholder="Cantidad de Weed">
+            <button onclick="burnWeed()">Quemar</button>
+        </div>
+
+        <div class="action-card">
+            <h3><i class="fas fa-coins"></i> Reclamar Recompensas</h3>
+            <button onclick="claimRewards()">Reclamar Todo</button>
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
@@ -221,54 +186,63 @@
                 try {
                     await window.ethereum.request({ method: 'eth_requestAccounts' });
                     web3 = new Web3(window.ethereum);
-                    account = (await web3.eth.getAccounts())[0];
+                    [account] = await web3.eth.getAccounts();
                     initContract();
-                    updateAllStats();
-                    setInterval(updateAllStats, 3000);
-                    document.getElementById('connectBtn').textContent = account.slice(0,6) + '...' + account.slice(-4);
+                    updateStats();
+                    setInterval(updateStats, 3000);
+                    document.getElementById('connectBtn').textContent = `${account.slice(0, 6)}...${account.slice(-4)}`;
+                    document.getElementById('accountInfo').innerHTML = `
+                        <div>BNB: <span id="bnbBalance">0</span></div>
+                        <div>Weed: <span id="weedBalance">0</span></div>
+                    `;
                 } catch (error) {
-                    showNotification('Error al conectar: ' + error.message, 'error');
+                    alert('Error conectando: ' + error.message);
                 }
             } else {
-                showNotification('Por favor instala MetaMask', 'error');
+                alert('Instala MetaMask!');
             }
         }
 
         function initContract() {
             contract = new web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS);
-            
-            contract.events.Bought({ from: account })
-                .on('data', updateAllStats);
-            
-            contract.events.Burned({ from: account })
-                .on('data', updateAllStats);
+            contract.events.Bought().on('data', updateStats);
+            contract.events.Burned().on('data', updateStats);
         }
 
-        async function updateAllStats() {
+        async function updateStats() {
             try {
-                // Obtener estadísticas globales
+                // Global Stats
                 const globalStats = await contract.methods.getGlobalStats().call();
-                document.getElementById('totalInvested').textContent = web3.utils.fromWei(globalStats[0], 'ether') + ' BNB';
-                document.getElementById('totalWeedProduced').textContent = web3.utils.fromWei(globalStats[1], 'ether');
-                document.getElementById('totalBurned').textContent = web3.utils.fromWei(globalStats[2], 'ether');
-                document.getElementById('totalDividends').textContent = web3.utils.fromWei(globalStats[3], 'ether') + ' BNB';
-                document.getElementById('totalBurnRewards').textContent = web3.utils.fromWei(globalStats[4], 'ether') + ' BNB';
+                document.getElementById('totalInvested').textContent = formatBNB(globalStats[0]);
+                document.getElementById('totalWeedProduced').textContent = globalStats[1];
+                document.getElementById('totalBurned').textContent = globalStats[2];
+                document.getElementById('totalDividends').textContent = formatBNB(globalStats[3]);
+                document.getElementById('totalBurnRewards').textContent = formatBNB(globalStats[4]);
                 document.getElementById('activeUsers').textContent = globalStats[6];
 
-                // Obtener estadísticas del usuario
+                // User Stats
                 const userStats = await contract.methods.getUserStats(account).call();
-                document.getElementById('userInvested').textContent = web3.utils.fromWei(userStats[0][0], 'ether') + ' BNB';
-                document.getElementById('userWeedProduced').textContent = web3.utils.fromWei(userStats[0][1], 'ether');
-                document.getElementById('userBurned').textContent = web3.utils.fromWei(userStats[0][2], 'ether');
-                document.getElementById('userDividends').textContent = web3.utils.fromWei(userStats[0][3], 'ether') + ' BNB';
-                document.getElementById('userBurnRewards').textContent = web3.utils.fromWei(userStats[0][4], 'ether') + ' BNB';
-                document.getElementById('pendingRewards').textContent = 
-                    (parseFloat(web3.utils.fromWei(userStats[1][0], 'ether')) + 
-                     parseFloat(web3.utils.fromWei(userStats[1][1], 'ether'))).toFixed(6) + ' BNB';
+                document.getElementById('userInvested').textContent = formatBNB(userStats[0][0]);
+                document.getElementById('userWeedProduced').textContent = userStats[0][1];
+                document.getElementById('userBurned').textContent = userStats[0][2];
+                document.getElementById('userDividends').textContent = formatBNB(userStats[0][3]);
+                document.getElementById('userBurnRewards').textContent = formatBNB(userStats[0][4]);
+                
+                const pending = userStats[1].reduce((a, b) => a + parseInt(b), 0);
+                document.getElementById('pendingRewards').textContent = formatBNB(pending.toString());
+
+                // Balances
+                const balance = await web3.eth.getBalance(account);
+                document.getElementById('bnbBalance').textContent = formatBNB(balance);
+                document.getElementById('weedBalance').textContent = userStats[0][1];
 
             } catch (error) {
-                console.error('Error actualizando estadísticas:', error);
+                console.error('Error actualizando:', error);
             }
+        }
+
+        function formatBNB(value) {
+            return parseFloat(web3.utils.fromWei(value, 'ether')).toFixed(4) + ' BNB';
         }
 
         async function buyUnits() {
@@ -278,46 +252,27 @@
                     from: account,
                     value: web3.utils.toWei(amount, 'ether')
                 });
-                showNotification('Unidades compradas exitosamente!', 'success');
             } catch (error) {
-                showNotification('Error: ' + error.message, 'error');
+                alert('Error: ' + error.message);
             }
         }
 
         async function burnWeed() {
             const amount = document.getElementById('burnAmount').value;
             try {
-                await contract.methods.burnWeed(web3.utils.toWei(amount, 'ether')).send({ from: account });
-                showNotification('Weed quemado exitosamente!', 'success');
+                await contract.methods.burnWeed(amount).send({ from: account });
             } catch (error) {
-                showNotification('Error: ' + error.message, 'error');
+                alert('Error: ' + error.message);
             }
         }
 
         async function claimRewards() {
             try {
                 await contract.methods.claimRewards().send({ from: account });
-                showNotification('Recompensas reclamadas!', 'success');
             } catch (error) {
-                showNotification('Error: ' + error.message, 'error');
+                alert('Error: ' + error.message);
             }
         }
-
-        function showNotification(message, type = 'info') {
-            const notification = document.getElementById('notification');
-            notification.textContent = message;
-            notification.className = `notification ${type}`;
-            notification.style.display = 'block';
-            setTimeout(() => notification.style.display = 'none', 5000);
-        }
-
-        // Inicialización
-        window.addEventListener('load', () => {
-            if(window.ethereum) {
-                window.ethereum.on('accountsChanged', () => window.location.reload());
-                window.ethereum.on('chainChanged', () => window.location.reload());
-            }
-        });
     </script>
 </body>
 </html>
