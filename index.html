@@ -3,72 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weed Farm Stats</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Weed Farm v2</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
+        <!-- Header -->
         <div class="header">
             <h1><i class="fas fa-cannabis"></i> Weed Farm</h1>
-            <div class="wallet-section">
-                <button onclick="connectWallet()" id="connectBtn">Conectar Wallet</button>
-                <div class="wallet-info">
-                    <div><span>BNB:</span> <span id="bnbBalance">0.0000</span></div>
-                    <div><span>WEED:</span> <span id="weedBalance">0</span></div>
+            <div class="wallet-info">
+                <button id="connectButton">Conectar Wallet</button>
+                <div class="balances">
+                    <div><i class="fab fa-btc"></i> <span id="bnbBalance">0.0000</span> BNB</div>
+                    <div><i class="fas fa-leaf"></i> <span id="weedBalance">0</span> WEED</div>
                 </div>
             </div>
         </div>
 
-        <div class="stats-container">
-            <!-- Estadísticas Globales -->
+        <!-- Estadísticas -->
+        <div class="stats-grid">
+            <!-- Globales -->
             <div class="stat-card">
                 <h2><i class="fas fa-globe"></i> Globales</h2>
                 <div class="stat-item">
                     <span>Total Invertido:</span>
-                    <span class="value" id="totalInvested">0 BNB</span>
+                    <span id="totalInvested">0.0000 BNB</span>
                 </div>
                 <div class="stat-item">
                     <span>Weed Producido:</span>
-                    <span class="value" id="totalWeed">0</span>
+                    <span id="totalWeed">0</span>
                 </div>
                 <div class="stat-item">
                     <span>Weed Quemado:</span>
-                    <span class="value" id="totalBurned">0</span>
+                    <span id="totalBurned">0</span>
                 </div>
             </div>
 
-            <!-- Estadísticas Usuario -->
+            <!-- Usuario -->
             <div class="stat-card">
                 <h2><i class="fas fa-user"></i> Mis Stats</h2>
                 <div class="stat-item">
-                    <span>Invertido:</span>
-                    <span class="value" id="userInvested">0 BNB</span>
+                    <span>Mi Inversión:</span>
+                    <span id="userInvested">0.0000 BNB</span>
                 </div>
                 <div class="stat-item">
                     <span>Producción/s:</span>
-                    <span class="value" id="productionRate">0</span>
+                    <span id="productionRate">0</span>
                 </div>
                 <div class="stat-item">
                     <span>Recompensas:</span>
-                    <span class="value" id="pendingRewards">0 BNB</span>
+                    <span id="pendingRewards">0.0000 BNB</span>
                 </div>
             </div>
         </div>
 
-        <div class="actions-container">
+        <!-- Acciones -->
+        <div class="actions-grid">
             <div class="action-card">
                 <h3><i class="fas fa-coins"></i> Comprar Unidades</h3>
                 <input type="number" id="buyAmount" step="0.001" placeholder="BNB">
-                <button onclick="buyUnits()">Comprar (0.001 BNB/unidad)</button>
+                <button id="buyButton">Comprar (0.001 BNB/unidad)</button>
             </div>
 
             <div class="action-card">
                 <h3><i class="fas fa-fire"></i> Quemar Weed</h3>
-                <input type="number" id="burnAmount" placeholder="Cantidad">
-                <button onclick="burnWeed()">Quemar</button>
+                <input type="number" id="burnAmount" placeholder="Cantidad WEED">
+                <button id="burnButton">Quemar</button>
             </div>
         </div>
+
+        <!-- Notificaciones -->
+        <div id="notification" class="notification"></div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
