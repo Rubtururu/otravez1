@@ -1,13 +1,22 @@
-// app.js - Versión Completa
+// app.js - Versión BSC Testnet
 let contract;
 let userAddress;
 let provider;
-let signer;
 
-// Configuración (REEMPLAZAR CON TUS DATOS)
-const CONTRACT_ADDRESS = '0xF26B81A0c34aC6b126074Ba5f79C5D5418FFeBCD';
+// Configuración BSC Testnet
+const CONTRACT_ADDRESS = '0xF26B81A0c34aC6b126074Ba5f79C5D5418FFeBCD'; // Reemplazar con tu dirección
 const CONTRACT_ABI = [{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"enum AdvancedWeedFarm.PlantType","name":"plantType","type":"uint8"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"PlantPurchased","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"address","name":"referrer","type":"address"}],"name":"ReferralRegistered","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"enum AdvancedWeedFarm.UpgradeType","name":"upgradeType","type":"uint8"},{"indexed":false,"internalType":"uint256","name":"level","type":"uint256"}],"name":"UpgradePurchased","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"bnbReceived","type":"uint256"}],"name":"WeedBurned","type":"event"},{"inputs":[],"name":"BURN_RATE","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"DAILY_POOL","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"REFERRAL_BONUS","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"allPlayers","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"burnWeed","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"enum AdvancedWeedFarm.PlantType","name":"plantType","type":"uint8"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"buyPlant","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"enum AdvancedWeedFarm.UpgradeType","name":"upgradeType","type":"uint8"}],"name":"buyUpgrade","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"components":[{"internalType":"uint256","name":"baseCost","type":"uint256"},{"internalType":"uint256","name":"baseProduction","type":"uint256"},{"internalType":"uint256","name":"growthFactor","type":"uint256"}],"internalType":"struct AdvancedWeedFarm.PlantConfig","name":"config","type":"tuple"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"calculatePlantCost","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"pure","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"}],"name":"calculateProduction","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"components":[{"internalType":"uint256","name":"cost","type":"uint256"},{"internalType":"uint256","name":"effect","type":"uint256"},{"internalType":"uint256","name":"maxLevel","type":"uint256"}],"internalType":"struct AdvancedWeedFarm.UpgradeConfig","name":"config","type":"tuple"},{"internalType":"uint256","name":"currentLevel","type":"uint256"}],"name":"calculateUpgradeCost","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"pure","type":"function"},{"inputs":[],"name":"claimReferralBonus","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"harvestWeed","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"plantConfigs","outputs":[{"internalType":"uint256","name":"baseCost","type":"uint256"},{"internalType":"uint256","name":"baseProduction","type":"uint256"},{"internalType":"uint256","name":"growthFactor","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"players","outputs":[{"internalType":"uint256","name":"weed","type":"uint256"},{"internalType":"uint256","name":"lastHarvest","type":"uint256"},{"internalType":"uint256","name":"totalBurned","type":"uint256"},{"internalType":"uint256","name":"totalEarned","type":"uint256"},{"internalType":"string","name":"username","type":"string"},{"internalType":"address","name":"referrer","type":"address"},{"internalType":"uint256","name":"referrals","type":"uint256"},{"internalType":"uint256","name":"bonus","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"string","name":"name","type":"string"},{"internalType":"address","name":"referrer","type":"address"}],"name":"register","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"totalBNB","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalWeed","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"upgradeConfigs","outputs":[{"internalType":"uint256","name":"cost","type":"uint256"},{"internalType":"uint256","name":"effect","type":"uint256"},{"internalType":"uint256","name":"maxLevel","type":"uint256"}],"stateMutability":"view","type":"function"}];
-const BSC_CHAIN_ID = 'https://bsc-dataseed.binance.org/'; // BSC Mainnet
+const BSC_TESTNET_CONFIG = {
+    chainId: '0x61', // 97 en decimal
+    chainName: 'Binance Smart Chain Testnet',
+    nativeCurrency: {
+        name: 'BNB',
+        symbol: 'BNB',
+        decimals: 18
+    },
+    rpcUrls: ['https://data-seed-prebsc-1-s1.binance.org:8545/'],
+    blockExplorerUrls: ['https://testnet.bscscan.com/']
+};
 
 // Elementos UI
 const UI = {
@@ -15,229 +24,189 @@ const UI = {
     weedBalance: document.getElementById('weedBalance'),
     bnbBalance: document.getElementById('bnbBalance'),
     productionRate: document.getElementById('productionRate'),
-    plantsOwned: document.getElementById('plantsOwned'),
-    upgradesOwned: document.getElementById('upgradesOwned'),
-    leaderboard: document.getElementById('leaderboard'),
     shopPlants: document.getElementById('shopPlants'),
-    shopUpgrades: document.getElementById('shopUpgrades'),
-    burnAmount: document.getElementById('burnAmount'),
-    referralBonus: document.getElementById('referralBonus'),
-    registerModal: document.getElementById('registerModal'),
-    usernameInput: document.getElementById('username'),
-    referrerInput: document.getElementById('referrer')
+    leaderboard: document.getElementById('leaderboard')
 };
 
 // Inicialización
 async function init() {
-    if (!window.ethereum) return showError('Instala MetaMask');
-    
     try {
+        // 1. Deshabilitar TronWeb si existe
+        if (window.tronWeb) window.tronWeb = null;
+
+        // 2. Verificar si MetaMask está instalado
+        if (!window.ethereum) return showError('Instala MetaMask: https://metamask.io');
+
         provider = new ethers.providers.Web3Provider(window.ethereum);
-        signer = provider.getSigner();
         
-        setupEventListeners();
+        // 3. Configurar listeners de eventos
+        window.ethereum.on('chainChanged', handleChainChanged);
+        window.ethereum.on('accountsChanged', handleAccountsChanged);
+
+        // 4. Verificar y configurar red
         await checkNetwork();
-        await handleAccountsChanged();
         
-        if (await isRegistered()) {
-            startAutoHarvest();
-            loadShopItems();
-        } else {
-            showModal('registerModal');
+        // 5. Conectar automáticamente si ya está autenticado
+        const accounts = await provider.listAccounts();
+        if (accounts.length > 0) {
+            userAddress = accounts[0];
+            await setupContract();
         }
-        
+
     } catch (error) {
         showError(error.message);
     }
 }
 
-// Registro de usuario
-async function registerUser() {
+// Conexión a MetaMask
+async function connectWallet() {
     try {
-        const username = UI.usernameInput.value;
-        const referrer = UI.referrerInput.value || ethers.constants.AddressZero;
+        // 1. Solicitar conexión de cuenta
+        await provider.send('eth_requestAccounts', []);
         
-        if (!username) throw new Error('¡Nombre requerido!');
+        // 2. Obtener cuenta
+        userAddress = await provider.getSigner().getAddress();
         
-        const tx = await contract.register(username, referrer);
-        await tx.wait();
+        // 3. Actualizar UI
+        UI.connectBtn.textContent = `${userAddress.slice(0,6)}...${userAddress.slice(-4)}`;
         
-        hideModal('registerModal');
-        startAutoHarvest();
+        // 4. Inicializar contrato
+        await setupContract();
+        
+    } catch (error) {
+        showError(`Error de conexión: ${error.message}`);
+    }
+}
+
+// Configurar red BSC Testnet
+async function checkNetwork() {
+    const chainId = await provider.send('eth_chainId', []);
+    
+    if (chainId !== BSC_TESTNET_CONFIG.chainId) {
+        try {
+            await provider.send('wallet_switchEthereumChain', [{ 
+                chainId: BSC_TESTNET_CONFIG.chainId 
+            }]);
+        } catch (error) {
+            if (error.code === 4902) {
+                await provider.send('wallet_addEthereumChain', [BSC_TESTNET_CONFIG]);
+            }
+        }
+    }
+}
+
+// Inicializar contrato
+async function setupContract() {
+    try {
+        contract = new ethers.Contract(
+            CONTRACT_ADDRESS,
+            CONTRACT_ABI,
+            provider.getSigner()
+        );
+
+        // Verificar conexión
+        const totalWeed = await contract.totalWeed();
+        console.log('Conexión exitosa al contrato. Total WEED:', totalWeed.toString());
+        
+        // Iniciar actualizaciones
+        updatePlayerStats();
         loadShopItems();
-        updateAllStats();
-        
+        startAutoHarvest();
+
     } catch (error) {
-        showError(error.message);
+        showError(`Error en contrato: ${error.message}`);
     }
 }
 
-// Tienda Dinámica
-async function loadShopItems() {
-    try {
-        // Cargar plantas
-        const plantCount = await contract.plantConfigsLength();
-        UI.shopPlants.innerHTML = await Promise.all(
-            Array.from({length: plantCount}, async (_, i) => {
-                const config = await contract.plantConfigs(i);
-                return `
-                    <div class="shop-item">
-                        <h3>${await contract.getPlantName(i)}</h3>
-                        <p>Producción: ${config.baseProduction}/s</p>
-                        <p>Coste: ${ethers.utils.formatEther(config.baseCost)} BNB</p>
-                        <div class="shop-actions">
-                            <button onclick="buyPlant(${i}, 1)">+1</button>
-                            <button onclick="buyPlant(${i}, 5)">+5</button>
-                        </div>
-                    </div>
-                `;
-            })
-        ).join('');
-
-        // Cargar mejoras
-        const upgradeCount = await contract.upgradeConfigsLength();
-        UI.shopUpgrades.innerHTML = await Promise.all(
-            Array.from({length: upgradeCount}, async (_, i) => {
-                const config = await contract.upgradeConfigs(i);
-                const currentLevel = await contract.getUpgradeLevel(userAddress, i);
-                return `
-                    <div class="shop-item">
-                        <h3>Mejora Nivel ${currentLevel + 1}</h3>
-                        <p>+${config.effect}% Eficiencia</p>
-                        <p>Coste: ${ethers.utils.formatEther(config.cost)} BNB</p>
-                        <button onclick="buyUpgrade(${i})">Mejorar</button>
-                    </div>
-                `;
-            })
-        ).join('');
-        
-    } catch (error) {
-        showError(error.message);
-    }
-}
-
-// Transacciones Complejas
+// Función para comprar plantas (ejemplo)
 async function buyPlant(plantType, amount) {
     try {
         showLoader();
-        const cost = await contract.calculatePlantCost(plantType, amount);
-        const tx = await contract.buyPlant(plantType, amount, { 
-            value: cost,
-            gasLimit: 500000 
-        });
-        await tx.wait();
-        updateAllStats();
-        showSuccess(`¡${amount} plantas compradas!`);
-    } catch (error) {
-        showError(`Fallo compra: ${error.message}`);
-    } finally {
-        hideLoader();
-    }
-}
-
-async function burnWeed() {
-    try {
-        showLoader();
-        const amount = UI.burnAmount.value;
-        if (!amount || amount <= 0) throw new Error('Cantidad inválida');
+        const cost = await contract.getPlantCost(plantType, amount);
         
-        const tx = await contract.burnWeed(amount, { gasLimit: 300000 });
+        const tx = await contract.buyPlant(plantType, amount, {
+            value: cost,
+            gasLimit: 300000 // Ajustar según necesidad
+        });
+        
         await tx.wait();
-        updateAllStats();
-        showSuccess(`¡${amount} WEED quemados!`);
+        updatePlayerStats();
+        showSuccess(`¡${amount} plantas compradas!`);
+
     } catch (error) {
-        showError(`Fallo al quemar: ${error.message}`);
+        showError(`Error en compra: ${error.message}`);
     } finally {
         hideLoader();
     }
 }
 
-// Sistema de Referidos
-async function handleReferrals() {
-    const referralBonus = await contract.getReferralBonus(userAddress);
-    UI.referralBonus.textContent = ethers.utils.formatEther(referralBonus);
-    
-    const referralLink = `${window.location.href}?ref=${userAddress}`;
-    document.getElementById('referralLink').textContent = referralLink;
-}
-
-// Actualización Completa de Stats
-async function updateAllStats() {
+// Actualizar estadísticas del jugador
+async function updatePlayerStats() {
     try {
         const player = await contract.players(userAddress);
         
-        // Balances
         UI.weedBalance.textContent = ethers.utils.formatUnits(player.weed, 0);
         UI.bnbBalance.textContent = ethers.utils.formatEther(player.totalEarned);
-        UI.productionRate.textContent = await contract.calculateProduction(userAddress);
-        
-        // Plantas y Mejoras
-        UI.plantsOwned.innerHTML = player.plants.map((count, i) => `
-            <div class="plant-item">
-                <span>Tipo ${i + 1}:</span>
-                <span>${count} unidades</span>
-            </div>
-        `).join('');
-        
-        UI.upgradesOwned.innerHTML = player.upgrades.map((level, i) => `
-            <div class="upgrade-item">
-                <span>Mejora ${i + 1}:</span>
-                <span>Nivel ${level}</span>
-            </div>
-        `).join('');
-        
-        // Referidos
-        await handleReferrals();
-        await loadLeaderboard();
-        
+        UI.productionRate.textContent = await contract.getProductionRate(userAddress);
+
     } catch (error) {
-        showError(error.message);
+        showError(`Error actualizando stats: ${error.message}`);
     }
 }
 
-// Helpers
-function setupEventListeners() {
-    // Botones
-    document.getElementById('registerBtn').addEventListener('click', registerUser);
-    document.getElementById('burnBtn').addEventListener('click', burnWeed);
-    document.getElementById('claimBonusBtn').addEventListener('click', claimReferralBonus);
-    
-    // Modales
-    document.querySelectorAll('.modal-close').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            hideModal(e.target.closest('.modal').id);
-        });
-    });
-}
-
-async function claimReferralBonus() {
-    try {
-        showLoader();
-        const tx = await contract.claimReferralBonus();
-        await tx.wait();
-        updateAllStats();
-        showSuccess('¡Bono reclamado!');
-    } catch (error) {
-        showError(`Error: ${error.message}`);
-    } finally {
-        hideLoader();
+// Manejar cambio de red
+async function handleChainChanged(chainId) {
+    if (chainId !== BSC_TESTNET_CONFIG.chainId) {
+        showError('Cambia a BSC Testnet');
+        await checkNetwork();
     }
 }
 
-// Sistema de Notificaciones
+// Manejar cambio de cuenta
+async function handleAccountsChanged(accounts) {
+    if (accounts.length === 0) {
+        showError('Wallet desconectada');
+        window.location.reload();
+    } else {
+        userAddress = accounts[0];
+        await setupContract();
+    }
+}
+
+// Auto-cosecha cada 30 segundos
+function startAutoHarvest() {
+    setInterval(async () => {
+        if (userAddress) {
+            try {
+                await contract.harvestWeed();
+                updatePlayerStats();
+            } catch (error) {
+                console.log('Error en auto-cosecha:', error);
+            }
+        }
+    }, 30000); // 30 segundos
+}
+
+// Funciones de UI
 function showError(message) {
-    const errorDiv = document.getElementById('errorNotification');
-    errorDiv.textContent = message;
-    errorDiv.classList.add('show');
-    setTimeout(() => errorDiv.classList.remove('show'), 5000);
+    console.error(message);
+    alert(message); // Reemplazar con tu sistema de notificaciones
 }
 
 function showSuccess(message) {
-    const successDiv = document.getElementById('successNotification');
-    successDiv.textContent = message;
-    successDiv.classList.add('show');
-    setTimeout(() => successDiv.classList.remove('show'), 3000);
+    console.log(message);
+    // Implementar notificación visual
 }
 
-// Iniciar
+function showLoader() {
+    document.getElementById('loader').style.display = 'block';
+}
+
+function hideLoader() {
+    document.getElementById('loader').style.display = 'none';
+}
+
+// Iniciar la aplicación
 window.onload = init;
+window.connectWallet = connectWallet;
+window.buyPlant = buyPlant;
