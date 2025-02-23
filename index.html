@@ -1,116 +1,55 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BNB Game</title>
+    <title>BNB Idle Game</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="game-container">
-        <!-- Header del juego -->
-        <header class="game-header">
-            <h1>BNB Game</h1>
-            <p>Deposita, juega y gana recompensas.</p>
+    <div class="container">
+        <header>
+            <h1>BNB Idle</h1>
+            <div id="walletInfo">
+                <button id="connectButton">Connect Wallet</button>
+                <span id="walletAddress"></span>
+            </div>
         </header>
 
-        <!-- Panel de estadísticas -->
-        <section class="game-stats">
-            <div class="stat-card">
-                <h3>Total BNB Depositado</h3>
-                <p id="totalDeposited">0 BNB</p>
+        <div class="gamePanel">
+            <div class="stats">
+                <div class="statCard">
+                    <h3>Your Score</h3>
+                    <p id="currentScore">0</p>
+                </div>
+                <div class="statCard">
+                    <h3>Production</h3>
+                    <p id="productionRate">0/s</p>
+                </div>
+                <div class="statCard">
+                    <h3>Pool</h3>
+                    <p id="currentPool">0 BNB</p>
+                </div>
             </div>
-            <div class="stat-card">
-                <h3>Total Recompensas Pagadas</h3>
-                <p id="totalDividendsPaid">0 BNB</p>
-            </div>
-            <div class="stat-card">
-                <h3>Usuarios Únicos</h3>
-                <p id="totalUsers">0</p>
-            </div>
-            <div class="stat-card">
-                <h3>Pool Actual</h3>
-                <p id="currentPoolBalance">0 BNB</p>
-            </div>
-            <div class="stat-card">
-                <h3>Lotería Actual</h3>
-                <p id="lotteryPool">0 BNB</p>
-            </div>
-            <div class="stat-card">
-                <h3>Recompensas Diarias</h3>
-                <p id="dailyRewards">0 BNB</p>
-            </div>
-            <div class="stat-card">
-                <h3>Último Ganador</h3>
-                <p id="lastLotteryWinner">--</p>
-            </div>
-            <div class="stat-card">
-                <h3>Premio de Lotería</h3>
-                <p id="lastLotteryPrize">--</p>
-            </div>
-            <div class="stat-card">
-                <h3>Total Retirado</h3>
-                <p id="totalWithdrawn">0 BNB</p>
-            </div>
-        </section>
 
-        <!-- Panel de acciones -->
-        <section class="game-actions">
-            <div class="action-card">
-                <h3>Depositar BNB</h3>
-                <input type="number" id="depositAmount" placeholder="Cantidad de BNB" min="0">
-                <input type="text" id="referrerAddress" placeholder="Referido (opcional)">
-                <button id="depositButton">Depositar</button>
+            <div class="actions">
+                <button id="claimButton" disabled>Claim Production</button>
+                <button id="submitButton" disabled>Submit Score</button>
             </div>
-            <div class="action-card">
-                <h3>Reclamar</h3>
-                <p id="nextClaimTime">Próxima reclamación: --</p>
-                <button id="claimButton">Reclamar</button>
-            </div>
-            <div class="action-card">
-                <h3>Retirar</h3>
-                <input type="number" id="withdrawAmount" placeholder="Cantidad de BNB" min="0">
-                <button id="withdrawButton">Retirar</button>
-            </div>
-            <div class="action-card">
-                <h3>Lotería</h3>
-                <button id="drawLotteryButton">Sortear</button>
-            </div>
-        </section>
+        </div>
 
-        <!-- Panel de usuario -->
-        <section class="game-user-stats">
-            <h2>Mis Estadísticas</h2>
-            <div class="user-stat-card">
-                <h3>BNB Depositado</h3>
-                <p id="myDepositedAmount">0 BNB</p>
-            </div>
-            <div class="user-stat-card">
-                <h3>Recompensas</h3>
-                <p id="myTotalEarned">0 BNB</p>
-            </div>
-            <div class="user-stat-card">
-                <h3>Referidos</h3>
-                <p id="myReferralEarnings">0 BNB</p>
-            </div>
-            <div class="user-stat-card">
-                <h3>Referidos</h3>
-                <p id="myReferralCount">0</p>
-            </div>
-            <div class="user-stat-card">
-                <h3>Tiempo para Reclamar</h3>
-                <p id="nextClaimTimeUser">--</p>
-            </div>
-        </section>
+        <div class="shop">
+            <h2>Units Shop</h2>
+            <div id="unitsContainer"></div>
+        </div>
 
-        <!-- Footer del juego -->
-        <footer class="game-footer">
-            <p>© 2023 BNB Game. Todos los derechos reservados.</p>
-        </footer>
+        <div class="leaderboard">
+            <h2>Weekly Leaderboard</h2>
+            <div id="leaderboardList"></div>
+        </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
     <script src="app.js"></script>
 </body>
 </html>
