@@ -3,114 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weed Farm Interface</title>
+    <title>Weed Farm Stats</title>
+    <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        :root {
-            --primary: #4CAF50;
-            --dark-bg: #121212;
-            --card-bg: #1E1E1E;
-            --text-primary: #fff;
-            --text-secondary: #888;
-        }
-
-        body {
-            background: var(--dark-bg);
-            color: var(--text-primary);
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 20px;
-            min-height: 100vh;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-            padding: 1rem;
-            background: var(--card-bg);
-            border-radius: 12px;
-        }
-
-        .wallet-section {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-        }
-
-        .stats-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .stat-card {
-            background: var(--card-bg);
-            padding: 1.5rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-
-        .stat-row {
-            display: flex;
-            justify-content: space-between;
-            margin: 1rem 0;
-            padding: 0.5rem 0;
-            border-bottom: 1px solid #333;
-        }
-
-        .actions-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .action-card {
-            background: var(--card-bg);
-            padding: 1.5rem;
-            border-radius: 12px;
-            text-align: center;
-        }
-
-        input {
-            width: 100%;
-            padding: 1rem;
-            margin: 1rem 0;
-            background: #2a2a2a;
-            border: 1px solid #333;
-            border-radius: 8px;
-            color: var(--text-primary);
-            font-size: 1rem;
-        }
-
-        button {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 1rem 2rem;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            width: 100%;
-        }
-
-        button:hover {
-            opacity: 0.9;
-            transform: translateY(-2px);
-        }
-
-        .value {
-            color: var(--primary);
-            font-weight: bold;
-        }
-    </style>
 </head>
 <body>
     <div class="container">
@@ -118,56 +13,44 @@
             <h1><i class="fas fa-cannabis"></i> Weed Farm</h1>
             <div class="wallet-section">
                 <button onclick="connectWallet()" id="connectBtn">Conectar Wallet</button>
-                <div id="walletInfo" class="stat-card">
-                    <div class="stat-row">
-                        <span>BNB:</span>
-                        <span class="value" id="bnbBalance">0.0000</span>
-                    </div>
-                    <div class="stat-row">
-                        <span>WEED:</span>
-                        <span class="value" id="weedBalance">0</span>
-                    </div>
+                <div class="wallet-info">
+                    <div><span>BNB:</span> <span id="bnbBalance">0.0000</span></div>
+                    <div><span>WEED:</span> <span id="weedBalance">0</span></div>
                 </div>
             </div>
         </div>
 
         <div class="stats-container">
+            <!-- Estadísticas Globales -->
             <div class="stat-card">
-                <h2><i class="fas fa-globe"></i> Estadísticas Globales</h2>
-                <div class="stat-row">
+                <h2><i class="fas fa-globe"></i> Globales</h2>
+                <div class="stat-item">
                     <span>Total Invertido:</span>
                     <span class="value" id="totalInvested">0 BNB</span>
                 </div>
-                <div class="stat-row">
+                <div class="stat-item">
                     <span>Weed Producido:</span>
-                    <span class="value" id="totalWeedProduced">0</span>
+                    <span class="value" id="totalWeed">0</span>
                 </div>
-                <div class="stat-row">
+                <div class="stat-item">
                     <span>Weed Quemado:</span>
                     <span class="value" id="totalBurned">0</span>
                 </div>
-                <div class="stat-row">
-                    <span>Usuarios Activos:</span>
-                    <span class="value" id="activeUsers">0</span>
-                </div>
             </div>
 
+            <!-- Estadísticas Usuario -->
             <div class="stat-card">
-                <h2><i class="fas fa-user"></i> Mis Estadísticas</h2>
-                <div class="stat-row">
+                <h2><i class="fas fa-user"></i> Mis Stats</h2>
+                <div class="stat-item">
                     <span>Invertido:</span>
                     <span class="value" id="userInvested">0 BNB</span>
                 </div>
-                <div class="stat-row">
+                <div class="stat-item">
                     <span>Producción/s:</span>
                     <span class="value" id="productionRate">0</span>
                 </div>
-                <div class="stat-row">
-                    <span>Weed Quemado:</span>
-                    <span class="value" id="userBurned">0</span>
-                </div>
-                <div class="stat-row">
-                    <span>Recompensas Pendientes:</span>
+                <div class="stat-item">
+                    <span>Recompensas:</span>
                     <span class="value" id="pendingRewards">0 BNB</span>
                 </div>
             </div>
@@ -176,123 +59,19 @@
         <div class="actions-container">
             <div class="action-card">
                 <h3><i class="fas fa-coins"></i> Comprar Unidades</h3>
-                <input type="number" id="buyAmount" step="0.001" placeholder="BNB a invertir">
+                <input type="number" id="buyAmount" step="0.001" placeholder="BNB">
                 <button onclick="buyUnits()">Comprar (0.001 BNB/unidad)</button>
             </div>
 
             <div class="action-card">
                 <h3><i class="fas fa-fire"></i> Quemar Weed</h3>
-                <input type="number" id="burnAmount" placeholder="Cantidad de Weed">
+                <input type="number" id="burnAmount" placeholder="Cantidad">
                 <button onclick="burnWeed()">Quemar</button>
-            </div>
-
-            <div class="action-card">
-                <h3><i class="fas fa-wallet"></i> Reclamar</h3>
-                <button onclick="claimRewards()">Reclamar Recompensas</button>
             </div>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
-    <script>
-        let web3, contract, account;
-        const CONTRACT_ADDRESS = '0xcB02cE74AeA8aC527d8952Fb0393965fdD3229c5';
-        const CONTRACT_ABI = [{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[],"name":"PRICE","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"burnWeed","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"buyUnits","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"claimRewards","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"distributeDividends","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"getGlobalStats","outputs":[{"internalType":"uint256[8]","name":"contractData","type":"uint256[8]"},{"internalType":"uint256","name":"currentBalance","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"getUserStats","outputs":[{"internalType":"uint256[6]","name":"userData","type":"uint256[6]"},{"internalType":"uint256[2]","name":"pendingRewards","type":"uint256[2]"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"stats","outputs":[{"internalType":"uint256","name":"totalInvested","type":"uint256"},{"internalType":"uint256","name":"totalWeedProduced","type":"uint256"},{"internalType":"uint256","name":"totalBurned","type":"uint256"},{"internalType":"uint256","name":"totalDividends","type":"uint256"},{"internalType":"uint256","name":"totalBurnRewards","type":"uint256"},{"internalType":"uint256","name":"lastDistribution","type":"uint256"},{"internalType":"uint256","name":"activeUsers","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"users","outputs":[{"internalType":"uint256","name":"invested","type":"uint256"},{"internalType":"uint256","name":"weedProduced","type":"uint256"},{"internalType":"uint256","name":"burned","type":"uint256"},{"internalType":"uint256","name":"dividendsReceived","type":"uint256"},{"internalType":"uint256","name":"burnRewards","type":"uint256"},{"internalType":"uint256","name":"lastUpdate","type":"uint256"}],"stateMutability":"view","type":"function"}];
-
-        async function connectWallet() {
-            if (window.ethereum) {
-                try {
-                    await window.ethereum.request({ method: 'eth_requestAccounts' });
-                    web3 = new Web3(window.ethereum);
-                    account = (await web3.eth.getAccounts())[0];
-                    initContract();
-                    updateStats();
-                    setInterval(updateStats, 3000);
-                    document.getElementById('connectBtn').textContent = account.slice(0,6) + '...' + account.slice(-4);
-                } catch (error) {
-                    console.error("Error connecting:", error);
-                }
-            }
-        }
-
-        function initContract() {
-            contract = new web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS);
-            
-            // Listeners de eventos
-            contract.events.Bought().on('data', updateStats);
-            contract.events.Burned().on('data', updateStats);
-            contract.events.Distributed().on('data', updateStats);
-        }
-
-        async function updateStats() {
-            try {
-                // Obtener datos globales
-                const globalStats = await contract.methods.getGlobalStats().call();
-                document.getElementById('totalInvested').textContent = formatBNB(globalStats[0]);
-                document.getElementById('totalWeedProduced').textContent = globalStats[1];
-                document.getElementById('totalBurned').textContent = globalStats[2];
-                document.getElementById('activeUsers').textContent = globalStats[6];
-
-                // Obtener datos del usuario
-                const userStats = await contract.methods.getUserStats(account).call();
-                document.getElementById('userInvested').textContent = formatBNB(userStats[0][0]);
-                document.getElementById('productionRate').textContent = userStats[0][1] + '/s';
-                document.getElementById('userBurned').textContent = userStats[0][2];
-                
-                // Calcular recompensas pendientes
-                const pendingRewards = userStats[1][0].add(userStats[1][1]);
-                document.getElementById('pendingRewards').textContent = formatBNB(pendingRewards);
-
-                // Actualizar balances
-                const bnbBalance = await web3.eth.getBalance(account);
-                document.getElementById('bnbBalance').textContent = formatBNB(bnbBalance);
-                document.getElementById('weedBalance').textContent = userStats[0][1];
-
-            } catch (error) {
-                console.error("Error updating stats:", error);
-            }
-        }
-
-        function formatBNB(value) {
-            return parseFloat(web3.utils.fromWei(value, 'ether')).toFixed(4) + ' BNB';
-        }
-
-        async function buyUnits() {
-            const amount = document.getElementById('buyAmount').value;
-            try {
-                await contract.methods.buyUnits().send({
-                    from: account,
-                    value: web3.utils.toWei(amount, 'ether')
-                });
-            } catch (error) {
-                console.error("Error buying units:", error);
-            }
-        }
-
-        async function burnWeed() {
-            const amount = document.getElementById('burnAmount').value;
-            try {
-                await contract.methods.burnWeed(amount).send({ from: account });
-            } catch (error) {
-                console.error("Error burning weed:", error);
-            }
-        }
-
-        async function claimRewards() {
-            try {
-                await contract.methods.claimRewards().send({ from: account });
-            } catch (error) {
-                console.error("Error claiming rewards:", error);
-            }
-        }
-
-        // Inicialización
-        window.addEventListener('load', () => {
-            if(window.ethereum) {
-                window.ethereum.on('accountsChanged', () => window.location.reload());
-                window.ethereum.on('chainChanged', () => window.location.reload());
-            }
-        });
-    </script>
+    <script src="app.js"></script>
 </body>
 </html>
