@@ -1,346 +1,94 @@
+<!-- index.html -->
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weed Farm Evolution</title>
+    <title>Weed Game v2</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        :root {
-            --primary: #6dff8f;
-            --secondary: #38d96d;
-            --accent: #ffd700;
-            --dark: #0a1a0f;
-            --darker: #051108;
-            --neon-effect: 0 0 15px #6dff8f55;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Courier New', monospace;
-        }
-
-        body {
-            background: radial-gradient(circle at center, var(--darker), var(--dark));
-            color: white;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        .game-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px;
-            position: relative;
-        }
-
-        /* Efecto de partículas */
-        .particles {
-            position: fixed;
-            width: 100vw;
-            height: 100vh;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        /* Header holográfico */
-        .game-header {
-            text-align: center;
-            padding: 2rem;
-            margin-bottom: 3rem;
-            position: relative;
-            background: linear-gradient(45deg, #38d96d55, #6dff8f33);
-            border-radius: 20px;
-            border: 2px solid var(--primary);
-            box-shadow: var(--neon-effect);
-            animation: glow 2s infinite alternate;
-        }
-
-        @keyframes glow {
-            from { box-shadow: 0 0 10px #6dff8f33; }
-            to { box-shadow: 0 0 30px #6dff8f55; }
-        }
-
-        /* Área principal de juego */
-        .main-game-area {
-            display: grid;
-            grid-template-columns: 3fr 1fr;
-            gap: 2rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* Planta central animada */
-        .weed-plant {
-            position: relative;
-            width: 300px;
-            height: 400px;
-            margin: 0 auto;
-            background: url('plant-animation.gif') center/contain no-repeat;
-            filter: drop-shadow(0 0 20px var(--primary));
-            animation: float 3s ease-in-out infinite;
-            cursor: pointer;
-            transition: transform 0.3s;
-        }
-
-        .weed-plant:hover {
-            transform: scale(1.05) rotate(2deg);
-        }
-
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-            100% { transform: translateY(0px); }
-        }
-
-        /* Estadísticas flotantes */
-        .stats-panel {
-            background: linear-gradient(160deg, #0a1a0fdd, #051108dd);
-            backdrop-filter: blur(10px);
-            padding: 2rem;
-            border-radius: 15px;
-            border: 1px solid var(--primary);
-            box-shadow: var(--neon-effect);
-        }
-
-        .stat-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 1rem;
-            margin: 1rem 0;
-            background: #0a1a0f;
-            border-radius: 10px;
-            border: 1px solid #38d96d33;
-            transition: all 0.3s;
-        }
-
-        .stat-item:hover {
-            transform: translateX(10px);
-            border-color: var(--primary);
-        }
-
-        /* Tienda estilo arcade */
-        .shop-panel {
-            background: linear-gradient(200deg, #0a1a0f, #051108);
-            padding: 2rem;
-            border-radius: 15px;
-            border: 2px solid var(--primary);
-            box-shadow: var(--neon-effect);
-        }
-
-        .shop-item {
-            background: #0a1a0fdd;
-            padding: 1.5rem;
-            margin: 1rem 0;
-            border-radius: 10px;
-            border: 1px solid #38d96d33;
-            transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .shop-item:hover {
-            transform: scale(1.02);
-            box-shadow: 0 0 15px #6dff8f33;
-        }
-
-        .shop-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 50%;
-            height: 100%;
-            background: linear-gradient(
-                90deg,
-                transparent,
-                rgba(109, 255, 143, 0.1),
-                transparent
-            );
-            transition: 0.5s;
-        }
-
-        .shop-item:hover::before {
-            left: 100%;
-        }
-
-        /* Botones neón */
-        .neon-btn {
-            background: transparent;
-            border: 2px solid var(--primary);
-            color: var(--primary);
-            padding: 0.8rem 1.5rem;
-            border-radius: 30px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .neon-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                90deg,
-                transparent,
-                rgba(109, 255, 143, 0.3),
-                transparent
-            );
-            transition: 0.5s;
-        }
-
-        .neon-btn:hover {
-            background: #6dff8f11;
-            box-shadow: var(--neon-effect);
-        }
-
-        .neon-btn:hover::before {
-            left: 100%;
-        }
-
-        /* Leaderboard estilo retro */
-        .leaderboard {
-            background: #051108dd;
-            padding: 2rem;
-            border-radius: 15px;
-            border: 2px solid var(--primary);
-            margin-top: 2rem;
-        }
-
-        .leaderboard-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 1rem;
-            margin: 0.5rem 0;
-            background: #0a1a0f;
-            border-radius: 8px;
-            border: 1px solid #38d96d33;
-            animation: slideIn 0.5s ease-out;
-        }
-
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-
-        /* Notificaciones animadas */
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: -300px;
-            padding: 1rem 2rem;
-            border-radius: 10px;
-            color: white;
-            z-index: 1000;
-            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-        }
-
-        .notification.show {
-            right: 20px;
-        }
-
-        .error {
-            background: #ff4444dd;
-            border: 2px solid #ff0000;
-        }
-
-        .success {
-            background: #44ff44dd;
-            border: 2px solid #00ff00;
-        }
-
-        /* Efecto de carga */
-        .loader {
-            width: 50px;
-            height: 50px;
-            border: 5px solid var(--primary);
-            border-radius: 50%;
-            border-top-color: transparent;
-            animation: spin 1s linear infinite;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 1000;
-        }
-
-        @keyframes spin {
-            to { transform: translate(-50%, -50%) rotate(360deg); }
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="particles"></div>
-    
-    <div class="game-container">
-        <!-- Cabecera -->
-        <header class="game-header">
-            <h1>🌿 WEED FARM EVOLUTION 🚀</h1>
+    <div class="container">
+        <!-- Header -->
+        <header>
             <div class="wallet-info">
-                <button class="neon-btn" id="connectBtn">
-                    <i class="fas fa-wallet"></i> CONNECT WALLET
-                </button>
-                <div class="stats">
-                    <div class="stat-item">
-                        <span>WEED:</span>
-                        <span id="weedBalance">0</span>
+                <span id="accountAddress"></span>
+                <div class="balances">
+                    <div class="balance-item">
+                        <i class="fab fa-btc"></i>
+                        <span id="bnbBalance">0</span> BNB
                     </div>
-                    <div class="stat-item">
-                        <span>BNB:</span>
-                        <span id="bnbBalance">0.00</span>
+                    <div class="balance-item">
+                        <img src="weed-icon.png" class="weed-icon">
+                        <span id="weedBalance">0</span> WEED
                     </div>
                 </div>
             </div>
         </header>
 
-        <!-- Área principal -->
-        <main class="main-game-area">
+        <!-- Main Grid -->
+        <div class="grid-container">
             <!-- Sección izquierda -->
-            <div class="game-main">
-                <div class="weed-plant" id="mainPlant"></div>
-                <div class="stats-panel">
-                    <h2>⚡ PRODUCCIÓN</h2>
-                    <div class="stat-item">
-                        <span>Velocidad:</span>
-                        <span id="productionRate">0/s</span>
+            <div class="left-panel">
+                <div class="stats-box">
+                    <h2><i class="fas fa-chart-line"></i> Estadísticas</h2>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <label>Producción/s:</label>
+                            <span id="productionRate">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <label>Total invertido:</label>
+                            <span id="totalInvested">0</span> BNB
+                        </div>
+                        <div class="stat-item">
+                            <label>Dividendos:</label>
+                            <span id="pendingDividends">0</span> BNB
+                        </div>
+                        <div class="stat-item">
+                            <label>Quemado:</label>
+                            <span id="totalBurned">0</span> WEED
+                        </div>
                     </div>
-                    <div class="shop-panel">
-                        <h2>🛒 TIENDA DE PLANTAS</h2>
-                        <div class="shop-items" id="shopPlants"></div>
+                </div>
+
+                <div class="deposit-box">
+                    <h2><i class="fas fa-fire"></i> Goo Deposit Box</h2>
+                    <div class="input-group">
+                        <input type="number" id="weedToBurn" placeholder="Cantidad a quemar">
+                        <button onclick="burnWeed()" class="burn-button">Quemar WEED</button>
+                    </div>
+                    <div class="burn-stats">
+                        <div>Total quemado hoy: <span id="dailyBurned">0</span> WEED</div>
+                        <div>Tu share: <span id="burnShare">0%</span></div>
+                        <div>BNB estimado: <span id="estimatedBNB">0</span></div>
                     </div>
                 </div>
             </div>
 
             <!-- Sección derecha -->
-            <div class="sidebar">
-                <div class="shop-panel">
-                    <h2>🔧 MEJORAS</h2>
-                    <div class="shop-items" id="shopUpgrades"></div>
-                </div>
-                
-                <div class="leaderboard">
-                    <h2>🏆 TOP FARMERS</h2>
-                    <div id="leaderboard"></div>
+            <div class="shop-section">
+                <h2><i class="fas fa-store"></i> Tienda de Personajes</h2>
+                <div class="characters-grid" id="charactersContainer">
+                    <!-- Personajes generados dinámicamente -->
                 </div>
             </div>
-        </main>
+        </div>
 
-        <!-- Notificaciones -->
-        <div id="errorNotification" class="notification error"></div>
-        <div id="successNotification" class="notification success"></div>
-        
-        <!-- Loader -->
-        <div class="loader" id="loader"></div>
+        <!-- Tablas adicionales -->
+        <div class="leaderboards">
+            <div class="leaderboard">
+                <h3><i class="fas fa-trophy"></i> Top Productores</h3>
+                <div id="producersRanking"></div>
+            </div>
+            <div class="leaderboard">
+                <h3><i class="fas fa-fire"></i> Top Quemadores</h3>
+                <div id="burnersRanking"></div>
+            </div>
+        </div>
     </div>
 
-    <script src="https://cdn.ethers.io/lib/ethers-5.6.umd.min.js"></script>
-    <script src="app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="game.js"></script>
 </body>
 </html>
