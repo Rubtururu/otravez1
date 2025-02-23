@@ -193,127 +193,124 @@
         const CONTRACT_ADDRESS = '0xcB02cE74AeA8aC527d8952Fb0393965fdD3229c5'; // Tu dirección del contrato
         const CONTRACT_ABI = [{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[],"name":"PRICE","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"burnWeed","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"buyUnits","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"claimRewards","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"distributeDividends","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"getGlobalStats","outputs":[{"internalType":"uint256[8]","name":"contractData","type":"uint256[8]"},{"internalType":"uint256","name":"currentBalance","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"getUserStats","outputs":[{"internalType":"uint256[6]","name":"userData","type":"uint256[6]"},{"internalType":"uint256[2]","name":"pendingRewards","type":"uint256[2]"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"stats","outputs":[{"internalType":"uint256","name":"totalInvested","type":"uint256"},{"internalType":"uint256","name":"totalWeedProduced","type":"uint256"},{"internalType":"uint256","name":"totalBurned","type":"uint256"},{"internalType":"uint256","name":"totalDividends","type":"uint256"},{"internalType":"uint256","name":"totalBurnRewards","type":"uint256"},{"internalType":"uint256","name":"lastDistribution","type":"uint256"},{"internalType":"uint256","name":"activeUsers","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"users","outputs":[{"internalType":"uint256","name":"invested","type":"uint256"},{"internalType":"uint256","name":"weedProduced","type":"uint256"},{"internalType":"uint256","name":"burned","type":"uint256"},{"internalType":"uint256","name":"dividendsReceived","type":"uint256"},{"internalType":"uint256","name":"burnRewards","type":"uint256"},{"internalType":"uint256","name":"lastUpdate","type":"uint256"}],"stateMutability":"view","type":"function"}]; // Tu ABI del contrato
 
-        async function connectWallet() {
-            if (window.ethereum) {
-                try {
-                    await window.ethereum.request({ method: 'eth_requestAccounts' });
-                    web3 = new Web3(window.ethereum);
-                    account = (await web3.eth.getAccounts())[0];
-                    initContract();
-                    updateAllData();
-                    setInterval(updateAllData, 5000);
-                    checkAdmin();
-                } catch (error) {
-                    showNotification('Error connecting: ' + error.message, 'error');
-                }
-            } else {
-                showNotification('Install MetaMask!', 'error');
-            }
-        }
+async function connectWallet() {
+    try {
+        if (!window.ethereum) throw new Error("Instala MetaMask");
+        
+        await window.ethereum.request({ method: 'eth_requestAccounts' });
+        web3 = new Web3(window.ethereum);
+        account = (await web3.eth.getAccounts())[0];
+        
+        initContract();
+        setupEventListeners();
+        updateAllStats(); // Actualización inicial
+        setInterval(updateAllStats, 3000); // Actualizar cada 3 segundos
+        
+        document.getElementById('connectBtn').textContent = account.slice(0,6) + '...' + account.slice(-4);
+    } catch (error) {
+        showNotification(`Error: ${error.message}`, 'error');
+    }
+}
 
-        function initContract() {
-            contract = new web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS);
-            
-            contract.events.Bought({ from: account })
-                .on('data', updateAllData);
-            
-            contract.events.Burned({ from: account })
-                .on('data', updateAllData);
-        }
+function initContract() {
+    contract = new web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS);
+}
 
-        async function updateAllData() {
-            try {
-                // Obtener datos del contrato
-                const [global, user, pending] = await Promise.all([
-                    contract.methods.getGlobalStats().call(),
-                    contract.methods.getUserStats(account).call(),
-                    contract.methods.calculatePendingRewards(account).call()
-                ]);
+async function updateAllStats() {
+    try {
+        // Obtener datos del contrato
+        const [
+            totalInvested, 
+            totalWeed, 
+            totalBurned,
+            userInvested,
+            userWeed,
+            userBurned,
+            pendingRewards
+        ] = await Promise.all([
+            contract.methods.totalInvested().call(),
+            contract.methods.totalWeedProduced().call(),
+            contract.methods.totalBurned().call(),
+            contract.methods.users(account).call().then(u => u.invested),
+            contract.methods.users(account).call().then(u => u.weedProduced),
+            contract.methods.users(account).call().then(u => u.burned),
+            contract.methods.pendingRewards(account).call()
+        ]);
 
-                // Actualizar UI
-                document.getElementById('totalInvested').textContent = web3.utils.fromWei(global.totalInvested, 'ether') + ' BNB';
-                document.getElementById('totalWeed').textContent = web3.utils.fromWei(global.totalWeedProduced, 'ether');
-                document.getElementById('totalBurned').textContent = web3.utils.fromWei(global.totalBurned, 'ether');
-                
-                document.getElementById('userInvested').textContent = web3.utils.fromWei(user.invested, 'ether') + ' BNB';
-                document.getElementById('productionRate').textContent = web3.utils.fromWei(user.weedProduced, 'ether') + '/s';
-                document.getElementById('userBurned').textContent = web3.utils.fromWei(user.burned, 'ether');
-                
-                document.getElementById('pendingRewards').textContent = web3.utils.fromWei(pending, 'ether') + ' BNB';
-                document.getElementById('rewardsInfo span').textContent = web3.utils.fromWei(pending, 'ether') + ' BNB';
+        // Actualizar estadísticas globales
+        document.getElementById('totalInvested').textContent = web3.utils.fromWei(totalInvested, 'ether') + ' BNB';
+        document.getElementById('totalWeed').textContent = web3.utils.fromWei(totalWeed, 'ether');
+        document.getElementById('totalBurned').textContent = web3.utils.fromWei(totalBurned, 'ether');
 
-                // Actualizar balance
-                const balance = await web3.eth.getBalance(account);
-                document.getElementById('bnbBalance').textContent = web3.utils.fromWei(balance, 'ether') + ' BNB';
+        // Actualizar estadísticas del usuario
+        document.getElementById('userInvested').textContent = web3.utils.fromWei(userInvested, 'ether') + ' BNB';
+        document.getElementById('userWeed').textContent = web3.utils.fromWei(userWeed, 'ether') + '/s';
+        document.getElementById('userBurned').textContent = web3.utils.fromWei(userBurned, 'ether');
+        
+        // Actualizar recompensas
+        document.getElementById('pendingRewards').textContent = web3.utils.fromWei(pendingRewards, 'ether') + ' BNB';
+        
+        // Actualizar balance de BNB
+        const balance = await web3.eth.getBalance(account);
+        document.getElementById('bnbBalance').textContent = web3.utils.fromWei(balance, 'ether') + ' BNB';
 
-            } catch (error) {
-                console.error('Error updating data:', error);
-            }
-        }
+    } catch (error) {
+        console.error('Error actualizando datos:', error);
+    }
+}
 
-        async function buyUnits() {
-            const amount = document.getElementById('buyAmount').value;
-            try {
-                await contract.methods.buyUnits().send({
-                    from: account,
-                    value: web3.utils.toWei(amount, 'ether')
-                });
-                showNotification('¡Unidades compradas!', 'success');
-            } catch (error) {
-                showNotification('Error: ' + error.message, 'error');
-            }
-        }
+// Listeners de eventos del contrato
+function setupEventListeners() {
+    contract.events.Bought({ from: account })
+        .on('data', () => updateAllStats())
+        .on('error', console.error);
 
-        async function burnWeed() {
-            const amount = document.getElementById('burnAmount').value;
-            try {
-                await contract.methods.burnWeed(web3.utils.toWei(amount, 'ether')).send({ from: account });
-                showNotification('Weed quemado exitosamente', 'success');
-            } catch (error) {
-                showNotification('Error: ' + error.message, 'error');
-            }
-        }
+    contract.events.Burned({ from: account })
+        .on('data', () => updateAllStats())
+        .on('error', console.error);
 
-        async function claimRewards() {
-            try {
-                await contract.methods.claimRewards().send({ from: account });
-                showNotification('Recompensas reclamadas', 'success');
-            } catch (error) {
-                showNotification('Error: ' + error.message, 'error');
-            }
-        }
+    contract.events.RewardsClaimed({ from: account })
+        .on('data', () => updateAllStats())
+        .on('error', console.error);
+}
 
-        async function distributeDividends() {
-            try {
-                await contract.methods.distributeDividends().send({ from: account });
-                showNotification('Dividendos distribuidos', 'success');
-            } catch (error) {
-                showNotification('Error: ' + error.message, 'error');
-            }
-        }
-
-        function showNotification(message, type = 'info') {
-            const notification = document.getElementById('notification');
-            notification.textContent = message;
-            notification.className = `notification ${type}`;
-            notification.style.display = 'block';
-            setTimeout(() => notification.style.display = 'none', 5000);
-        }
-
-        async function checkAdmin() {
-            const owner = await contract.methods.owner().call();
-            if (owner.toLowerCase() === account.toLowerCase()) {
-                document.getElementById('adminPanel').style.display = 'block';
-            }
-        }
-
-        // Inicialización
-        window.addEventListener('load', () => {
-            if (window.ethereum) {
-                window.ethereum.on('accountsChanged', () => window.location.reload());
-                window.ethereum.on('chainChanged', () => window.location.reload());
-            }
+// Funciones de interacción (mantener igual que antes)
+async function buyUnits() {
+    const amount = document.getElementById('buyAmount').value;
+    try {
+        await contract.methods.buyUnits().send({
+            from: account,
+            value: web3.utils.toWei(amount, 'ether')
         });
-    </script>
-</body>
-</html>
+        showNotification('Unidades compradas!', 'success');
+    } catch (error) {
+        showNotification(`Error: ${error.message}`, 'error');
+    }
+}
+
+async function burnWeed() {
+    const amount = document.getElementById('burnAmount').value;
+    try {
+        await contract.methods.burnWeed(web3.utils.toWei(amount, 'ether')).send({ from: account });
+        showNotification('Weed quemado!', 'success');
+    } catch (error) {
+        showNotification(`Error: ${error.message}`, 'error');
+    }
+}
+
+// Funciones auxiliares
+function showNotification(message, type = 'info') {
+    const notification = document.getElementById('notification');
+    notification.textContent = message;
+    notification.className = `notification ${type}`;
+    notification.style.display = 'block';
+    setTimeout(() => notification.style.display = 'none', 5000);
+}
+
+// Inicialización
+window.addEventListener('load', () => {
+    if (window.ethereum) {
+        window.ethereum.on('accountsChanged', () => window.location.reload());
+        window.ethereum.on('chainChanged', () => window.location.reload());
+    }
+});
