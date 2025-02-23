@@ -1,17 +1,18 @@
-/* style.css */
 :root {
     --primary: #4CAF50;
-    --background: #1a1a1a;
-    --card-bg: #2d2d2d;
-    --text: #ffffff;
+    --dark-bg: #121212;
+    --card-bg: #1E1E1E;
+    --text-primary: #fff;
+    --text-secondary: #888;
 }
 
 body {
-    background: var(--background);
-    color: var(--text);
+    background: var(--dark-bg);
+    color: var(--text-primary);
     font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 20px;
+    min-height: 100vh;
 }
 
 .container {
@@ -19,80 +20,91 @@ body {
     margin: 0 auto;
 }
 
-.stats-box {
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding: 1rem;
     background: var(--card-bg);
-    border-radius: 10px;
-    padding: 20px;
-    margin: 15px 0;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    border-radius: 12px;
 }
 
-.stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 15px;
-    margin-top: 15px;
+.wallet-section {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
 }
 
-.stat-item {
-    background: #3a3a3a;
-    padding: 15px;
+.wallet-info {
+    background: #2a2a2a;
+    padding: 1rem;
     border-radius: 8px;
 }
 
-.stat-item label {
-    color: #888;
-    display: block;
-    margin-bottom: 5px;
-}
-
-.action-box {
+.stats-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-    margin: 25px 0;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: var(--card-bg);
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.stat-item {
+    display: flex;
+    justify-content: space-between;
+    margin: 1rem 0;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #333;
+}
+
+.value {
+    color: var(--primary);
+    font-weight: bold;
+}
+
+.actions-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
 }
 
 .action-card {
     background: var(--card-bg);
-    padding: 20px;
-    border-radius: 10px;
+    padding: 1.5rem;
+    border-radius: 12px;
     text-align: center;
+}
+
+input {
+    width: 100%;
+    padding: 1rem;
+    margin: 1rem 0;
+    background: #2a2a2a;
+    border: 1px solid #333;
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-size: 1rem;
 }
 
 button {
     background: var(--primary);
     color: white;
     border: none;
-    padding: 12px 25px;
+    padding: 1rem 2rem;
     border-radius: 8px;
     cursor: pointer;
-    margin: 10px 0;
-    transition: opacity 0.3s;
+    transition: all 0.3s ease;
+    width: 100%;
 }
 
 button:hover {
     opacity: 0.9;
-}
-
-input {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border-radius: 6px;
-    border: 1px solid #444;
-    background: #333;
-    color: white;
-}
-
-.admin-box {
-    background: #2a2a2a;
-    padding: 20px;
-    border-radius: 10px;
-    margin-top: 25px;
-    text-align: center;
-}
-
-#adminSection {
-    display: none;
+    transform: translateY(-2px);
 }
