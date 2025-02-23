@@ -3,53 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BNB Idle Game</title>
+    <title>Trongoo Evolution 2.0</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>BNB Idle</h1>
-            <div id="walletInfo">
-                <button id="connectButton">Connect Wallet</button>
-                <span id="walletAddress"></span>
-            </div>
-        </header>
-
-        <div class="gamePanel">
-            <div class="stats">
-                <div class="statCard">
-                    <h3>Your Score</h3>
-                    <p id="currentScore">0</p>
+    <!-- Menú Principal -->
+    <div class="game-container">
+        <div class="header">
+            <div class="wallet-section">
+                <button id="connectBtn" class="glow-button">🦊 Connect MetaMask</button>
+                <div class="balance-box">
+                    <span>🪙 ETH: <span id="ethBalance">0.00</span></span>
+                    <span>🏆 Level: <span id="playerLevel">1</span></span>
                 </div>
-                <div class="statCard">
-                    <h3>Production</h3>
-                    <p id="productionRate">0/s</p>
-                </div>
-                <div class="statCard">
-                    <h3>Pool</h3>
-                    <p id="currentPool">0 BNB</p>
-                </div>
-            </div>
-
-            <div class="actions">
-                <button id="claimButton" disabled>Claim Production</button>
-                <button id="submitButton" disabled>Submit Score</button>
             </div>
         </div>
 
-        <div class="shop">
-            <h2>Units Shop</h2>
-            <div id="unitsContainer"></div>
+        <!-- Zona Principal -->
+        <div class="main-content">
+            <!-- Panel de Mascota -->
+            <div class="pet-panel">
+                <div class="pet-display" id="petDisplay">
+                    <div class="evolution-stage">
+                        <img src="dragon_egg.png" class="pet-image animate__animated" id="petImage">
+                    </div>
+                    <div class="pet-status">
+                        <div class="status-bar health">
+                            <div class="fill" style="width: 100%"></div>
+                        </div>
+                        <div class="status-bar xp">
+                            <div class="fill" style="width: 0%"></div>
+                        </div>
+                        <div class="pet-stats-grid">
+                            <div class="stat-item">⚔️ Strength: 100</div>
+                            <div class="stat-item">🛡️ Health: 500</div>
+                            <div class="stat-item">🎯 Agility: 80</div>
+                            <div class="stat-item">🧠 Intel: 120</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Acciones -->
+                <div class="action-panel">
+                    <button class="action-btn feed-btn" onclick="feedPet()">🍖 Feed (0.01 ETH)</button>
+                    <button class="action-btn train-btn" onclick="trainPet()">💪 Train</button>
+                    <button class="action-btn battle-btn" onclick="openBattleModal()">⚔️ Battle</button>
+                    <button class="action-btn evolve-btn" onclick="evolvePet()">✨ Evolve</button>
+                </div>
+            </div>
+
+            <!-- Mercado y Rankings -->
+            <div class="market-panel">
+                <h2>🎪 Marketplace</h2>
+                <div class="market-listings" id="marketListings"></div>
+                
+                <h2>🏆 Leaderboard</h2>
+                <div class="leaderboard" id="leaderboard"></div>
+            </div>
         </div>
 
-        <div class="leaderboard">
-            <h2>Weekly Leaderboard</h2>
-            <div id="leaderboardList"></div>
+        <!-- Modales -->
+        <div id="battleModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>⚔️ Select Battle</h2>
+                <div id="battleOpponents"></div>
+            </div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
+    <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="app.js"></script>
 </body>
 </html>
